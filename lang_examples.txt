@@ -1,0 +1,28 @@
+function levelone(){
+	answer = 1;
+}
+
+function leveltwo(){
+	answer = 1+1;
+}
+
+function levelthree(){
+	answer = (1+1)*(1+1);
+}
+
+function levelfour(x){
+	answer = x;
+}
+
+function levelfive(x){
+	answer = x+x;
+}
+
+function levelsix(x){
+	y = x*x;
+	answer = y*y;
+}
+
+function levelseven(x){
+	
+}
