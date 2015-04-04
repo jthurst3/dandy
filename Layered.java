@@ -82,6 +82,7 @@ public class Layered extends JPanel{
 		StringBuilder sb = new StringBuilder();
 		for(Token t: rList){
 			sb = sb.append(t.content).append(" ");
+			p.addAndEvaluate(t);
 		}
 		programtext = sb.append("\n").toString();
 	}
