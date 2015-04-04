@@ -13,9 +13,8 @@ public class Layered extends JPanel{
     
     private final int WIDTH = 1350;
     private final int HEIGHT = 670;
-    private final int SPEED = 5;
-    private final int DELAY = 20;
-    private final int DELAY2 = 1000;
+    private final int FRAMEPAUSE = 20;
+    private final int NEWTOKENPAUSE = 1000;
     int gw, gh;
     int rw, rh;
     Point point1 = new Point(100, 500);
@@ -24,6 +23,10 @@ public class Layered extends JPanel{
 	ArrayList<Token> pList = new ArrayList<Token>();
     Polygon tail = new Polygon();
     Font font = new Font("TimesRoman", Font.PLAIN, 24);
+	
+	long lastpaint = System.currentTimeMillis();
+    double speed_per_ms = .25;
+	double token_speed_per_ms = .1;
 
 	String programtext="";
     
@@ -51,8 +54,8 @@ public class Layered extends JPanel{
         Color myblue = new Color(80,103,175);
         setBackground(myblue);
         setVisible(true);
-        timer  = new Timer(DELAY, new ProjectileListener());
-        timer2 = new Timer(DELAY2, new FListener());
+        timer = new Timer(FRAMEPAUSE, new PaintListener());
+        timer2 = new Timer(NEWTOKENPAUSE, new FListener());
         
         addKeyListener(new GuppyMover());
         setFocusable(true);
@@ -68,8 +71,13 @@ public class Layered extends JPanel{
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.black);
 
-		int newx = point1.x + SPEED*dir[0];
-		int newy = point1.y + SPEED*dir[1];
+		long time = System.currentTimeMillis();
+		long diff = time-lastpaint;
+		lastpaint = time;
+		
+		
+		int newx = point1.x + (int)(speed_per_ms*diff*dir[0]);
+		int newy = point1.y + (int)(speed_per_ms*diff*dir[1]);
 		if (0 <= newx && newx <= WIDTH-70){
 			point1.x = newx;
 		}
@@ -86,22 +94,33 @@ public class Layered extends JPanel{
         
         g2.fill(tail);
         
-        
-        for (Token token : rList){
-            if (token.removed) continue;
+		
+        for (Iterator<Token> i = rList.iterator(); i.hasNext();){
+			Token token = i.next();
             // set a rectangle red or green depending on if it was hit
+
+            Rectangle rect = token.rect;
+            rect.x -= (int)(token_speed_per_ms*diff);
+			if(rect.x < 0){
+				i.remove();
+				continue;
+			}
+			if(((rect.x >= point1.x) && (rect.x <= (point1.x + gw))) && ((rect.y >= point1.y) && (rect.y <= (point1.y + gh)))){
+				token.hit = true;
+			}
+
             if (token.hit) {
                 // if it was hit, see if the new token would produce a syntax error
 				if(token.type == TokenType.RBRACE) programtext += "\n";
 				programtext += token.content;
 				if(token.type == TokenType.RBRACE || token.type == TokenType.LBRACE || token.type == TokenType.SEMICOLON) programtext += "\n";
+
                 boolean valid = p.addAndEvaluate(token);
                 if (!valid) {
                     gameOver = true;
                 }
-                token.removed = true;
                 // remove the rectangle from the list
-                // rList.remove(token);
+                i.remove();
             } else {
                 g2.setColor(Color.red);
                 token.hit = false;
@@ -169,33 +188,19 @@ public class Layered extends JPanel{
         }
     
     }
-    
-    private class ProjectileListener implements ActionListener
+        
+    private class PaintListener implements ActionListener
     {
-        
-        
-        public void actionPerformed (ActionEvent e)
-        {
-//          rList.add(new Rectangle(WIDTH,(int)(Math.random()*HEIGHT),10,20));
-            for (Token token : rList){
-                Rectangle rect = token.rect;
-                rect.x -= SPEED;
-                if(((rect.x >= point1.x) && (rect.x <= (point1.x + gw))) && ((rect.y >= point1.y) && (rect.y <= (point1.y + gh))))
-                    token.hit = true;
-                    
-            }
-            repaint();
-            
+        public void actionPerformed(ActionEvent e){
+			repaint();
         }
     }
-    
+
     private class FListener implements ActionListener
     {
-        
         public void actionPerformed(ActionEvent e){
 			Token t = pList.get((int)(pList.size()*Math.random()));
             rList.add(new Token(t.content, t.type, new Rectangle(WIDTH,(int)(Math.random()*(HEIGHT-rh)), rw, rh)));
         }
     }
-
 }
