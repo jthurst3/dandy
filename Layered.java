@@ -10,25 +10,29 @@ import java.util.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.font.LineMetrics;
 
+import javax.imageio.ImageIO;
+import java.io.*;
+
 public class Layered extends JPanel{
 	int curr_scroll = 0;
     
     private final int FRAMEPAUSE = 20;
     private final int NEWTOKENPAUSE = 1000;
-    int gw, gh;
-    int rw, rh;
-		
-    Point point1 = new Point(100, 500);
-    private Timer timer,timer2;
+    int gw=50, gh=30;
+    int rw=50, rh=20;
+
+	double myx, myy;
+	double mapx, mapy;
+
+	private Timer timer,timer2;
     ArrayList<Token> rList = new ArrayList<Token>();
 	ArrayList<Token> pList = new ArrayList<Token>();
-    Polygon tail = new Polygon();
     Font font = new Font("TimesRoman", Font.PLAIN, 24);
 	
 	long lastpaint;
     double speed_per_ms = .25;
 	double accel_per_ms = .001;
-	double token_speed_per_ms = .1;
+	double token_speed_per_ms = .05;
 	double token_max_accel = .005;
 
 	String programtext="";
@@ -36,23 +40,20 @@ public class Layered extends JPanel{
     int dir[] = {0,0,0,0};
 	double vel[] = {0.0, 0.0};
 
+	Image testpic;
     Parser p;
-    boolean gameOver = false;
-  
     
     public Layered()
     {
-        p = new Parser();
+		
+		try{
+			testpic = ImageIO.read(new BufferedInputStream(new FileInputStream("testpic.png")));
+		} catch(Exception e){}
 		initlevel(0);
 		
 		lastpaint = System.currentTimeMillis();
 		
-        gw = 50;
-        gh = 30;
-        rw = 50;
-        rh = 20;
-        Color myblue = new Color(80,103,175);
-        setBackground(myblue);
+        setBackground(new Color(80, 103, 175));
         setVisible(true);
         timer = new Timer(FRAMEPAUSE, new PaintListener());
         timer2 = new Timer(NEWTOKENPAUSE, new FListener());
@@ -65,6 +66,8 @@ public class Layered extends JPanel{
     }
 	
 	public void initlevel(int level){
+        p = new Parser();
+
 		pList = new ArrayList<Token>();
 		pList.add(new Token("answer", TokenType.VARIABLE));
 		pList.add(new Token("=", TokenType.EQ));
@@ -85,15 +88,26 @@ public class Layered extends JPanel{
 			p.addAndEvaluate(t);
 		}
 		programtext = sb.append("\n").toString();
+		
+		myx = 100.0;
+		myy = 500.0;
+		
+		mapx = 0.0;
+		mapy = 0.0;
 	}
     
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
 		g.setFont(font);
+		g.setColor(Color.black);
+		
+		// paint start block
+		if(mapx < 450 && mapy < 450){
+			g.drawImage(testpic,-(int)mapx,-(int)mapy,450,450,Color.black,this);
+		}
 		
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.black);
 
 		long time = System.currentTimeMillis();
 		long diff = time-lastpaint;
@@ -107,57 +121,58 @@ public class Layered extends JPanel{
 		if(vel[1] < -speed_per_ms) vel[1] =-speed_per_ms;
 		if(vel[1] >  speed_per_ms) vel[1] = speed_per_ms;
 		
-		int newx = point1.x + (int)(vel[0]*diff);
-		int newy = point1.y + (int)(vel[1]*diff);
-		if(newx < 0){
-			newx = 0;
+		double newx = myx + vel[0]*diff;
+		double newy = myy + vel[1]*diff;
+		if(newx < mapx){
+			newx = mapx;
 			vel[0] = 0;
-		} else if(newx > getWidth()-gw){
-			newx = getWidth()-gw;
+		} else if(newx > mapx+getWidth()-gw){
+			newx = mapx+getWidth()-gw;
 			vel[0] = 0;
 		}
-		if(newy < 0){
-			newy = 0;
+		if(newy < mapy){
+			newy = mapy;
 			vel[1] = 0;
-		} else if(newy > getHeight()-gh){
-			newy = getHeight()-gh;
+		} else if(newy > mapy+getHeight()-gh){
+			newy = mapy+getHeight()-gh;
 			vel[1] = 0;
 		}
-		point1.x = newx;
-		point1.y = newy;
+		myx = newx;
+		myy = newy;
+		
+		double map_velocity = (newx-(mapx+2.0*getWidth()/3))/1000.0;
+		if(map_velocity < 0) map_velocity = 0;
+		if(vel[0] >= 0 && map_velocity > vel[0]) map_velocity = vel[0];
+		mapx += map_velocity*diff;
 
-        g2.fillOval(point1.x, point1.y, gw, gh);
+        g2.fillOval((int)(myx-mapx), (int)(myy-mapy), gw, gh);
         
-        int xPoly[] = {point1.x - 30, point1.x - 30, point1.x + 3};
-        int yPoly[] = {point1.y - 5, point1.y + 30, point1.y + gh/2};
+        int xPoly[] = {(int)(myx - 30-mapx), (int)(myx - 30-mapx), (int)(myx + 3-mapx)};
+        int yPoly[] = {(int)(myy - 5-mapy), (int)(myy + 30-mapy), (int)(myy + gh/2-mapy)};
 
-        tail = new Polygon(xPoly, yPoly, xPoly.length);
-        
-        g2.fill(tail);
+        g2.fill(new Polygon(xPoly, yPoly, xPoly.length));
         
         for (Iterator<Token> i = rList.iterator(); i.hasNext();){
 			Token token = i.next();
-            // set a rectangle red or green depending on if it was hit
 
 			token.vel += ((Math.random()-.5)*2)*token_max_accel;
-			
 			token.y += token.vel*diff;
 
 			Rectangle2D tokenbounds = g.getFontMetrics().getStringBounds(token.content, g);
 			LineMetrics tokenmetrics = g.getFontMetrics().getLineMetrics(token.content, g);
 
-			if(token.y < tokenmetrics.getAscent()  || token.y > getHeight()){
+			if(token.y < mapy+tokenmetrics.getAscent() || token.y > mapy+getHeight()-tokenmetrics.getDescent()){
 				i.remove();
 				continue;
 			}
 						
-            token.x -= (int)(token_speed_per_ms*diff);
-			if(token.x < 0){
+            token.x -= token_speed_per_ms*diff;
+			if(token.x < mapx){
 				i.remove();
 				continue;
 			}
 			
-            if (tokenbounds.intersects(point1.x-token.x, point1.y-token.y, gw, gh)) {
+			if (tokenbounds.intersects((int)(myx-token.x), (int)(myy-token.y), gw, gh)) {
                 // if it was hit, see if the new token would produce a syntax error
 				if(token.type == TokenType.RBRACE) programtext += "\n";
 				programtext += token.content;
@@ -179,12 +194,12 @@ public class Layered extends JPanel{
 			//g2.setColor(Color.red);
 			//g2.fill(token.rect);
 			g2.setColor(Color.black);
-			g2.drawString(token.content, (int)(token.x-1), (int)(token.y-1));
-			g2.drawString(token.content, (int)(token.x-1), (int)(token.y+1));
-			g2.drawString(token.content, (int)(token.x+1), (int)(token.y-1));
-			g2.drawString(token.content, (int)(token.x+1), (int)(token.y+1));
+			g2.drawString(token.content, (int)(token.x-1-mapx), (int)(token.y-1-mapy));
+			g2.drawString(token.content, (int)(token.x-1-mapx), (int)(token.y+1-mapy));
+			g2.drawString(token.content, (int)(token.x+1-mapx), (int)(token.y-1-mapy));
+			g2.drawString(token.content, (int)(token.x+1-mapx), (int)(token.y+1-mapy));
 			g2.setColor(Color.white);
-			g2.drawString(token.content, (int)token.x, (int)(token.y));
+			g2.drawString(token.content, (int)(token.x-mapx), (int)(token.y-mapy));
         }
 		
 		Scanner s = new Scanner(programtext);
@@ -192,10 +207,6 @@ public class Layered extends JPanel{
 		for(int line=0; s.hasNextLine(); line++){
 			g.drawString(s.nextLine(), 100, 100+20*line);
 		}
-
-        if (gameOver) {
-            g2.drawString("GAME OVER", 500, 500);
-        }
     }
 
     // // draws the text of the user's current program
@@ -262,8 +273,8 @@ public class Layered extends JPanel{
         public void actionPerformed(ActionEvent e){
 			Token t = pList.get((int)(pList.size()*Math.random()));
 			Token t2 = new Token(t.content, t.type);
-			t2.x = getWidth();
-			t2.y = Math.random()*(getHeight()-rh);
+			t2.x = mapx+getWidth();
+			t2.y = mapy+Math.random()*(getHeight()-rh);
             rList.add(t2);
         }
     }
