@@ -9,9 +9,6 @@
  * (, ), {, }, ;
  * if, elif, else
 */
-public enum TokenType {
-	'Integer', 'Variable', 'Function', 'Operator', 'Semicolon', 'Brace', 'Keyword', 'Undefined'
-}
 public class Token {
 	String content;
 	TokenType type;
@@ -19,6 +16,10 @@ public class Token {
 	public Token(String content, TokenType type) {
 		this.content = content;
 		this.type = type;
+	}
+
+	public String toString() {
+		return this.content;
 	}
 
 
