@@ -23,11 +23,11 @@ public class Parser {
 		// System.out.println(t);
 	}
 
-	ArrayList<Token> currentTokens;
+	ArrayList<Token> rList;
 
 
-	public Parser() {
-		currentTokens = new ArrayList<Token>();
+	public Parser(ArrayList<Token> rList) {
+		this.rList = rList;
 	}
 
 	/** returns true if adding the token to the list can still make for valid syntax, false otherwise */
@@ -37,7 +37,7 @@ public class Parser {
 	}
 
 	public void add(Token t) {
-		currentTokens.add(t);
+		rList.add(t);
 	}
 	/** returns true if the syntax is valid */
 	public boolean evaluate() {
