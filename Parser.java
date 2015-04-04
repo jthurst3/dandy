@@ -39,7 +39,6 @@ public class Parser {
 		currentTokens = new ArrayList<Token>();
 		currentFunctions = new ArrayList<Token>();
 		initializeRules();
-		initializeLevel(0);
 		currentProgramString = "";
 		numSuccesses = 0;
 	}
@@ -56,14 +55,6 @@ public class Parser {
 		if (t.type == TokenType.FUNCTION) {
 			currentFunctions.add(t);
 		}
-	}
-
-	public void initializeLevel(int level) {
-		addAndEvaluate(new Token("function", TokenType.FUNCTIONSTART));
-		addAndEvaluate(new Token("level " + level, TokenType.FUNCTION));
-		addAndEvaluate(new Token("(", TokenType.LPAREN));
-		addAndEvaluate(new Token(")", TokenType.RPAREN));
-		addAndEvaluate(new Token("{", TokenType.LBRACE));
 	}
 
 	public void initializeRules() {

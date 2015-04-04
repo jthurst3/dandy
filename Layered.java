@@ -20,7 +20,7 @@ public class Layered extends JPanel{
 		
     Point point1 = new Point(100, 500);
     private Timer timer,timer2;
-    ArrayList<Token> rList = new ArrayList<Token>();
+    ArrayList<Token> rList;
 	ArrayList<Token> pList = new ArrayList<Token>();
     Polygon tail = new Polygon();
     Font font = new Font("TimesRoman", Font.PLAIN, 24);
@@ -31,22 +31,18 @@ public class Layered extends JPanel{
 	double token_speed_per_ms = .1;
 	double token_max_accel = .005;
 
-	String programtext="";
+	String programtext;
     
     int dir[] = {0,0,0,0};
 	double vel[] = {0.0, 0.0};
 
     Parser p = new Parser();
     boolean gameOver = false;
-    
+  
     
     public Layered()
     {
-		pList.add(new Token("answer", TokenType.VARIABLE));
-		pList.add(new Token("=", TokenType.EQ));
-		pList.add(new Token("1", TokenType.INTEGER));
-		pList.add(new Token("+", TokenType.PLUS));
-		pList.add(new Token(";", TokenType.SEMICOLON));
+		initlevel(1);
 		
 		lastpaint = System.currentTimeMillis();
 		
@@ -66,10 +62,33 @@ public class Layered extends JPanel{
         timer.start();
         timer2.start();
     }
+	
+	public void initlevel(int level){
+		pList = new ArrayList<Token>();
+		pList.add(new Token("answer", TokenType.VARIABLE));
+		pList.add(new Token("=", TokenType.EQ));
+		pList.add(new Token("1", TokenType.INTEGER));
+		pList.add(new Token("+", TokenType.PLUS));
+		pList.add(new Token(";", TokenType.SEMICOLON));
+
+
+		rList = new ArrayList<Token>();
+		rList.add(new Token("function", TokenType.FUNCTIONSTART));
+		rList.add(new Token("level" + level, TokenType.FUNCTION));
+		rList.add(new Token("(", TokenType.LPAREN));
+		rList.add(new Token(")", TokenType.RPAREN));
+		rList.add(new Token("{", TokenType.LBRACE));
+		StringBuilder sb = new StringBuilder();
+		for(Token t: rList){
+			sb = sb.append(t.content).append(" ");
+		}
+		programtext = sb.append("\n").toString();
+	}
     
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
+		g.setFont(font);
 		
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.black);
@@ -159,7 +178,6 @@ public class Layered extends JPanel{
 			//g2.setColor(Color.red);
 			//g2.fill(token.rect);
 			g2.setColor(Color.black);
-			g2.setFont(font);
 			g2.drawString(token.content, (int)(token.x-1), (int)(token.y-1));
 			g2.drawString(token.content, (int)(token.x-1), (int)(token.y+1));
 			g2.drawString(token.content, (int)(token.x+1), (int)(token.y-1));
