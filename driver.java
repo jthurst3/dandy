@@ -14,5 +14,4 @@ public class driver {
 		theframe.setSize(1350, 670);
 		theframe.setVisible(true);
 	}
-
 }
