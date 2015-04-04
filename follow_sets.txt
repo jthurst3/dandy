@@ -1,0 +1,18 @@
+Non-Terminal Symbol	Follow Set
+Method	$
+FunctionStart	IfToken, LBrace, asdf
+Name	Eq, ,, RParen, LParen
+Vars	IfToken, LBrace, asdf
+VarList	asdf
+Body	
+Statement	IfToken, LBrace, asdf, RBrace, $
+IfStatement	IfToken, LBrace, asdf, RBrace, $
+Expr	RParen, IfToken, LBrace, asdf, RBrace, $
+SumExpr	Plus, Minus, LessThan, GreaterThan, EqEq, RParen, IfToken, LBrace, asdf, RBrace, $
+SumExprList	Plus, Minus, LessThan, GreaterThan, EqEq, RParen, IfToken, LBrace, asdf, RBrace, $
+ProdExpr	Plus, Minus, LessThan, GreaterThan, EqEq, RParen, IfToken, LBrace, asdf, RBrace, $
+ProdExprList	Plus, Minus, LessThan, GreaterThan, EqEq, RParen, IfToken, LBrace, asdf, RBrace, $
+Atom	Times, 000, LParen, Plus, Minus, LessThan, GreaterThan, EqEq, RParen, IfToken, LBrace, asdf, RBrace, $
+AssignStatement	IfToken, LBrace, asdf, RBrace, $
+BlockStmt	IfToken, LBrace, asdf, RBrace, $
+StmtList	RBrace

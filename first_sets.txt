@@ -1,0 +1,34 @@
+function	function
+asdf	asdf
+LParen	LParen
+RParen	RParen
+ε	ε
+,	,
+IfToken	IfToken
+LessThan	LessThan
+GreaterThan	GreaterThan
+EqEq	EqEq
+Plus	Plus
+Minus	Minus
+Times	Times
+000	000
+Eq	Eq
+LBrace	LBrace
+RBrace	RBrace
+FunctionStart	function
+Name	asdf
+Vars	LParen
+VarList	ε, asdf
+Body	ε, IfToken, LBrace, asdf
+IfStatement	IfToken
+SumExprList	ε, Plus, Minus
+Atom	000, LParen
+BlockStmt	LBrace
+StmtList	ε, IfToken, LBrace, asdf
+Method	function
+Statement	IfToken, LBrace, asdf
+ProdExpr	000, LParen
+ProdExprList	000, LParen
+AssignStatement	asdf
+SumExpr	000, LParen
+Expr	000, LParen
