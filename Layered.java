@@ -7,12 +7,11 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.util.*;
 
-
+import java.awt.geom.Rectangle2D;
+import java.awt.font.LineMetrics;
 
 public class Layered extends JPanel{
     
-    private final int WIDTH = 1350;
-    private final int HEIGHT = 670;
     private final int FRAMEPAUSE = 20;
     private final int NEWTOKENPAUSE = 1000;
     int gw, gh;
@@ -49,12 +48,10 @@ public class Layered extends JPanel{
 		
 		lastpaint = System.currentTimeMillis();
 		
-        setLayout(new BorderLayout());
         gw = 50;
         gh = 30;
         rw = 50;
         rh = 20;
-        setBounds(0, 0, WIDTH, HEIGHT);
         Color myblue = new Color(80,103,175);
         setBackground(myblue);
         setVisible(true);
@@ -92,15 +89,15 @@ public class Layered extends JPanel{
 		if(newx < 0){
 			newx = 0;
 			vel[0] = 0;
-		} else if(newx > WIDTH-70){
-			newx = WIDTH-70;
+		} else if(newx > getWidth()-gw){
+			newx = getWidth()-gw;
 			vel[0] = 0;
 		}
 		if(newy < 0){
 			newy = 0;
 			vel[1] = 0;
-		} else if(newy > HEIGHT-90){
-			newy = HEIGHT-90;
+		} else if(newy > getHeight()-gh){
+			newy = getHeight()-gh;
 			vel[1] = 0;
 		}
 		point1.x = newx;
@@ -124,7 +121,10 @@ public class Layered extends JPanel{
 			
 			token.y += token.vel*diff;
 
-			if(token.y < 0 || token.y > HEIGHT){
+			Rectangle2D tokenbounds = g.getFontMetrics().getStringBounds(token.content, g);
+			LineMetrics tokenmetrics = g.getFontMetrics().getLineMetrics(token.content, g);
+
+			if(token.y < tokenmetrics.getAscent()  || token.y > getHeight()){
 				i.remove();
 				continue;
 			}
@@ -134,11 +134,8 @@ public class Layered extends JPanel{
 				i.remove();
 				continue;
 			}
-			if(((token.x >= point1.x) && (token.x <= (point1.x + gw))) && ((token.y >= point1.y) && (token.y <= (point1.y + gh)))){
-				token.hit = true;
-			}
-
-            if (token.hit) {
+			
+            if (tokenbounds.intersects(point1.x-token.x, point1.y-token.y, gw, gh)) {
                 // if it was hit, see if the new token would produce a syntax error
 				if(token.type == TokenType.RBRACE) programtext += "\n";
 				programtext += token.content;
@@ -146,23 +143,27 @@ public class Layered extends JPanel{
 
                 boolean valid = p.addAndEvaluate(token);
                 if (!valid) {
-                    gameOver = true;
-                }
+					timer.stop();
+					timer2.stop();
+					SwingUtilities.getWindowAncestor(this).setVisible(false);
+					SwingUtilities.getWindowAncestor(this).dispose();
+					JOptionPane.showMessageDialog(null, "Syntax error, game over!"); 
+				}
                 // remove the rectangle from the list
                 i.remove();
-            } else {
-				// trick from http://stackoverflow.com/questions/7679459/thick-border-of-drawn-string
-                //g2.setColor(Color.red);
-                //g2.fill(token.rect);
-                g2.setColor(Color.black);
-                g2.setFont(font);
-                g2.drawString(token.content, (int)(token.x-1), (int)(token.y + rh-1));
-                g2.drawString(token.content, (int)(token.x-1), (int)(token.y + rh+1));
-                g2.drawString(token.content, (int)(token.x+1), (int)(token.y + rh-1));
-                g2.drawString(token.content, (int)(token.x+1), (int)(token.y + rh+1));
-                g2.setColor(Color.white);
-                g2.drawString(token.content, (int)token.x, (int)(token.y + rh));
-            }
+				continue;
+            }				
+			// trick from http://stackoverflow.com/questions/7679459/thick-border-of-drawn-string
+			//g2.setColor(Color.red);
+			//g2.fill(token.rect);
+			g2.setColor(Color.black);
+			g2.setFont(font);
+			g2.drawString(token.content, (int)(token.x-1), (int)(token.y-1));
+			g2.drawString(token.content, (int)(token.x-1), (int)(token.y+1));
+			g2.drawString(token.content, (int)(token.x+1), (int)(token.y-1));
+			g2.drawString(token.content, (int)(token.x+1), (int)(token.y+1));
+			g2.setColor(Color.white);
+			g2.drawString(token.content, (int)token.x, (int)(token.y));
         }
 		
 		Scanner s = new Scanner(programtext);
@@ -240,8 +241,8 @@ public class Layered extends JPanel{
         public void actionPerformed(ActionEvent e){
 			Token t = pList.get((int)(pList.size()*Math.random()));
 			Token t2 = new Token(t.content, t.type);
-			t2.x = WIDTH;
-			t2.y = Math.random()*(HEIGHT-rh);
+			t2.x = getWidth();
+			t2.y = Math.random()*(getHeight()-rh);
             rList.add(t2);
         }
     }
