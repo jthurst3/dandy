@@ -11,11 +11,13 @@ import java.awt.geom.Rectangle2D;
 import java.awt.font.LineMetrics;
 
 public class Layered extends JPanel{
+	int curr_scroll = 0;
     
     private final int FRAMEPAUSE = 20;
     private final int NEWTOKENPAUSE = 1000;
     int gw, gh;
     int rw, rh;
+		
     Point point1 = new Point(100, 500);
     private Timer timer,timer2;
     ArrayList<Token> rList = new ArrayList<Token>();

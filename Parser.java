@@ -59,11 +59,11 @@ public class Parser {
 	}
 
 	public void initializeLevel(int level) {
-		addAndEvaluate(new Token("function", TokenType.FUNCTIONSTART, null));
-		addAndEvaluate(new Token("level " + level, TokenType.FUNCTION, null));
-		addAndEvaluate(new Token("(", TokenType.LPAREN, null));
-		addAndEvaluate(new Token(")", TokenType.RPAREN, null));
-		addAndEvaluate(new Token("{", TokenType.LBRACE, null));
+		addAndEvaluate(new Token("function", TokenType.FUNCTIONSTART));
+		addAndEvaluate(new Token("level " + level, TokenType.FUNCTION));
+		addAndEvaluate(new Token("(", TokenType.LPAREN));
+		addAndEvaluate(new Token(")", TokenType.RPAREN));
+		addAndEvaluate(new Token("{", TokenType.LBRACE));
 	}
 
 	public void initializeRules() {
