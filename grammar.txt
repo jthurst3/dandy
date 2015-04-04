@@ -3,14 +3,13 @@ FunctionStart -> function Name LParen VarTail
 Name -> asdf
 VarTail -> RParen | Name VarList RParen
 VarList -> EPSILON | , Name VarList
-Body -> EPSILON | Statement Body
 Statement -> IfStatement | AssignStatement | BlockStmt
 IfStatement -> IfToken LParen Expr RParen
 Expr -> SumExpr ExprTail
 ExprTail -> EPSILON | LessThan SumExpr | GreaterThan SumExpr | EqEq SumExpr
 SumExpr -> ProdExpr SumExprTail
 SumExprTail -> EPSILON | SumExprList
-SumExprList -> EPSILON | Plus SumExpr SumExprList | Minus SumExpr SumExprList
+SumExprList -> Plus ProdExpr SumExprList | Minus ProdExpr SumExprList
 ProdExpr -> Atom ProdExprTail
 ProdExprTail -> EPSILON | ProdExprList
 ProdExprList -> Times ProdExprList
