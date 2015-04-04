@@ -26,11 +26,13 @@ public class Layered extends JPanel{
 	
 	long lastpaint = System.currentTimeMillis();
     double speed_per_ms = .25;
+	double accel_per_ms = .001;
 	double token_speed_per_ms = .1;
 
 	String programtext="";
     
     int dir[] = {0,0,0,0};
+	double vel[] = {0.0, 0.0};
 
     Parser p = new Parser();
     boolean gameOver = false;
@@ -74,15 +76,32 @@ public class Layered extends JPanel{
 		long diff = time-lastpaint;
 		lastpaint = time;
 		
+		vel[0] += (accel_per_ms*diff*(dir[1]-dir[0]));
+		vel[1] += (accel_per_ms*diff*(dir[3]-dir[2]));
 		
-		int newx = point1.x + (int)(speed_per_ms*diff*(dir[1]-dir[0]));
-		int newy = point1.y + (int)(speed_per_ms*diff*(dir[3]-dir[2]));
-		if (0 <= newx && newx <= WIDTH-70){
-			point1.x = newx;
+		if(vel[0] < -speed_per_ms) vel[0] =-speed_per_ms;
+		if(vel[0] >  speed_per_ms) vel[0] = speed_per_ms;
+		if(vel[1] < -speed_per_ms) vel[1] =-speed_per_ms;
+		if(vel[1] >  speed_per_ms) vel[1] = speed_per_ms;
+		
+		int newx = point1.x + (int)(vel[0]*diff);
+		int newy = point1.y + (int)(vel[1]*diff);
+		if(newx < 0){
+			newx = 0;
+			vel[0] = 0;
+		} else if(newx > WIDTH-70){
+			newx = WIDTH-70;
+			vel[0] = 0;
 		}
-		if (0 <= newy && newy <= HEIGHT-90){
-			point1.y = newy;
+		if(newy < 0){
+			newy = 0;
+			vel[1] = 0;
+		} else if(newy > HEIGHT-90){
+			newy = HEIGHT-90;
+			vel[1] = 0;
 		}
+		point1.x = newx;
+		point1.y = newy;
 
         g2.fillOval(point1.x, point1.y, gw, gh);
         
