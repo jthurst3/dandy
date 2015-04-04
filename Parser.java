@@ -57,49 +57,49 @@ public class Parser {
 	}
 
 
-	/** returns a new random token */
-	public Token getNewRandomToken(int WIDTH, int HEIGHT, int rw, int rh) {
-		// get a new random token (that's not undefined)
-		// NOTE: Requires UNDEFINED to be the last value in the enumeration!
-		TokenType type = TokenType.values()[(int)(Math.random() * TokenType.values().length
-			/*this is the part that requires undefined to be last thing in TokenType enumeration */ - 1)];
-		String content = getRandomContentFromTokenType(type);
-		return new Token(content, type, new Rectangle(WIDTH,(int)(Math.random()*(HEIGHT-rh)),rw,rh));
-	}
+	// /** returns a new random token */
+	// public Token getNewRandomToken(int WIDTH, int HEIGHT, int rw, int rh) {
+		// // get a new random token (that's not undefined)
+		// // NOTE: Requires UNDEFINED to be the last value in the enumeration!
+		// TokenType type = TokenType.values()[(int)(Math.random() * TokenType.values().length
+			// /*this is the part that requires undefined to be last thing in TokenType enumeration */ - 1)];
+		// String content = getRandomContentFromTokenType(type);
+		// return new Token(content, type, new Rectangle(WIDTH,(int)(Math.random()*(HEIGHT-rh)),rw,rh));
+	// }
 
-	/** returns a new random string given a token type */
-	public String getRandomContentFromTokenType(TokenType type) {
-		String randomVars[] = {"x", "y", "z"};
-		String operatorList[] = {"=", "==", "+", "-", "*", "/", "%"};
-		String brackets[] = {"(", ")", "{", "}", ";"};
-		String keywords[] = {"if"};
-		switch (type) {
-			case INTEGER:
-			return "" + (int)(Math.random() * 20);
-			case VARIABLE:
-			return randomFromList(randomVars);
-			case FUNCTION:
-			if (currentFunctions.size() == 0) {
-				// return a variable if the functions thing is null
-				return randomFromList(randomVars);
-			} else {
-				return currentFunctions.get((int)(Math.random() * currentFunctions.size())).content;
-			}
-			case OPERATOR:
-			return randomFromList(operatorList);
-			case BRACKET:
-			return randomFromList(brackets);
-			case KEYWORD:
-			return randomFromList(keywords);
-			case UNDEFINED:
-			return "undefined"; // should never do this
-			default: return "undefined2"; // should never get here
-		}
-	}
+	// /** returns a new random string given a token type */
+	// public String getRandomContentFromTokenType(TokenType type) {
+		// String randomVars[] = {"x", "y", "z"};
+		// String operatorList[] = {"=", "==", "+", "-", "*", "/", "%"};
+		// String brackets[] = {"(", ")", "{", "}", ";"};
+		// String keywords[] = {"if"};
+		// switch (type) {
+			// case INTEGER:
+			// return "" + (int)(Math.random() * 20);
+			// case VARIABLE:
+			// return randomFromList(randomVars);
+			// case FUNCTION:
+			// if (currentFunctions.size() == 0) {
+				// // return a variable if the functions thing is null
+				// return randomFromList(randomVars);
+			// } else {
+				// return currentFunctions.get((int)(Math.random() * currentFunctions.size())).content;
+			// }
+			// case OPERATOR:
+			// return randomFromList(operatorList);
+			// case BRACKET:
+			// return randomFromList(brackets);
+			// case KEYWORD:
+			// return randomFromList(keywords);
+			// case UNDEFINED:
+			// return "undefined"; // should never do this
+			// default: return "undefined2"; // should never get here
+		// }
+	// }
 
-	public String randomFromList(String[] list) {
-		return list[(int)(Math.random() * list.length)];
-	}
+	// public String randomFromList(String[] list) {
+		// return list[(int)(Math.random() * list.length)];
+	// }
 
 
 

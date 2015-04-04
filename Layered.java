@@ -18,13 +18,14 @@ public class Layered extends JPanel{
     private final int DELAY2 = 1000;
     int gw, gh;
     int rw, rh;
-    boolean move = false;
     Point point1 = new Point(100, 500);
     private Timer timer,timer2;
     ArrayList<Token> rList = new ArrayList<Token>();
+	ArrayList<Token> pList = new ArrayList<Token>();
     Polygon tail = new Polygon();
     Font font = new Font("TimesRoman", Font.PLAIN, 24);
 
+	String programtext="";
     
     private int[] dir = {0,0};
 
@@ -35,11 +36,17 @@ public class Layered extends JPanel{
     
     public Layered()
     {
+		pList.add(new Token("answer", TokenType.VARIABLE, null));
+		pList.add(new Token("=", TokenType.EQ, null));
+		pList.add(new Token("1", TokenType.INTEGER, null));
+		pList.add(new Token("+", TokenType.PLUS, null));
+		pList.add(new Token(";", TokenType.SEMICOLON, null));
+		
+        setLayout(new BorderLayout());
         gw = 50;
         gh = 30;
         rw = 50;
         rh = 20;
-        setLayout(null);
         setBounds(0, 0, WIDTH, HEIGHT);
         Color myblue = new Color(80,103,175);
         setBackground(myblue);
@@ -57,18 +64,19 @@ public class Layered extends JPanel{
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
+		
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.black);
-        if(move){
-            int newx = point1.x + SPEED*dir[0];
-            int newy = point1.y + SPEED*dir[1];
-            if (0 <= newx && newx <= WIDTH-70){
-                point1.x = newx;
-            }
-            if (0 <= newy && newy <= HEIGHT-90){
-                point1.y = newy;
-            }
-        }
+
+		int newx = point1.x + SPEED*dir[0];
+		int newy = point1.y + SPEED*dir[1];
+		if (0 <= newx && newx <= WIDTH-70){
+			point1.x = newx;
+		}
+		if (0 <= newy && newy <= HEIGHT-90){
+			point1.y = newy;
+		}
+
         g2.fillOval(point1.x, point1.y, gw, gh);
         
         int xPoly[] = {point1.x - 30, point1.x - 30, point1.x + 3};
@@ -84,6 +92,9 @@ public class Layered extends JPanel{
             // set a rectangle red or green depending on if it was hit
             if (token.hit) {
                 // if it was hit, see if the new token would produce a syntax error
+				if(token.type == TokenType.RBRACE) programtext += "\n";
+				programtext += token.content;
+				if(token.type == TokenType.RBRACE || token.type == TokenType.LBRACE || token.type == TokenType.SEMICOLON) programtext += "\n";
                 boolean valid = p.addAndEvaluate(token);
                 if (!valid) {
                     gameOver = true;
@@ -99,69 +110,61 @@ public class Layered extends JPanel{
                 g2.setFont(font);
                 g2.drawString(token.content, token.rect.x, token.rect.y + rh);
             }
-
         }
-
-        drawCurrentProgram(g2);
-
+		
+		Scanner s = new Scanner(programtext);
+		for(int line=0; s.hasNextLine(); line++){
+			g.drawString(s.nextLine(), 100, 100+20*line);
+		}
 
         if (gameOver) {
             g2.drawString("GAME OVER", 500, 500);
         }
     }
 
-    // draws the text of the user's current program
-    public void drawCurrentProgram(Graphics2D g2) {
-        g2.setColor(Color.black);
-        // http://stackoverflow.com/questions/18249592/how-to-change-font-size-in-drawstring-java
-        g2.setFont(font);
-        g2.drawString(p.currentProgramString, 100, 100);
-    }
+    // // draws the text of the user's current program
+	// public void drawCurrentProgram(Graphics2D g2) {
+		
+		// g2.setColor(Color.black);
+		// // http://stackoverflow.com/questions/18249592/how-to-change-font-size-in-drawstring-java
+		// g2.setFont(font);
+		// g2.drawString(p.currentProgramString, 100, 100);
+	// }
     
     
     class GuppyMover implements KeyListener{
         
-        public void keyTyped(KeyEvent Event){}
+        public void keyTyped(KeyEvent event){}
         
-        public void keyReleased(KeyEvent Event){
-            dir[0] = 0;
-            dir[1] = 0;
-            move = false;
+        public void keyReleased(KeyEvent event){
+			switch(event.getKeyCode()){
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_LEFT:
+				dir[0] = 0;
+				break;
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_DOWN:
+				dir[1] = 0;
+				break;
+			}
         }
         
         public void keyPressed(KeyEvent event)
         {
-            
-            if (!move){
-                if(event.getKeyCode() == KeyEvent.VK_RIGHT){
-                    dir[0] = 1;
-                    dir[1] = 0;
-                    move = true;
-                }
-                
-                if(event.getKeyCode() == KeyEvent.VK_LEFT){
-                    dir[0] = -1;
-                    dir[1] = 0;
-                    move = true;
-                }
-                
-                if(event.getKeyCode() == KeyEvent.VK_DOWN){
-                    dir[0] = 0;
-                    dir[1] = 1;
-                    move = true;
-                }
-                
-                if(event.getKeyCode() == KeyEvent.VK_UP){
-                    dir[0] = 0;
-                    dir[1] = -1;
-                    move = true;
-                }
-            }
-            
-            
-    
-            
-            
+            switch(event.getKeyCode()){
+			case KeyEvent.VK_RIGHT:
+				dir[0] = 1;
+				break;
+			case KeyEvent.VK_LEFT:
+				dir[0] = -1;
+				break;
+			case KeyEvent.VK_DOWN:
+				dir[1] = 1;
+				break;
+			case KeyEvent.VK_UP:
+				dir[1] = -1;
+				break;
+			}
             repaint();
         }
     
@@ -190,11 +193,9 @@ public class Layered extends JPanel{
     {
         
         public void actionPerformed(ActionEvent e){
-            rList.add(p.getNewRandomToken(WIDTH, HEIGHT, rw, rh));
+			Token t = pList.get((int)(pList.size()*Math.random()));
+            rList.add(new Token(t.content, t.type, new Rectangle(WIDTH,(int)(Math.random()*(HEIGHT-rh)), rw, rh)));
         }
     }
 
 }
-
-
-
