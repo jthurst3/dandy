@@ -16,14 +16,14 @@ public class Layered extends JPanel{
 	private final int SPEED = 10;
 	private final int DELAY = 20;
 	private final int DELAY2 = 1000;
-	//Point point1;
-	Point point2;
+	boolean hit = false;
 	int gw, gh;
 	int rw, rh;
 	boolean move = false;
 	Point point1 = new Point(100, 500);
 	private Timer timer,timer2;
 	ArrayList<Rectangle> rList = new ArrayList<Rectangle>();
+	Polygon tail = new Polygon();
 	
 	private int[] dir = {0,0};
 	
@@ -31,12 +31,13 @@ public class Layered extends JPanel{
 	public Layered()
 	{
 		gw = 50;
-		gh = 50;
+		gh = 30;
 		rw = 50;
 		rh = 10;
 		setLayout(null);
 		setBounds(0, 0, 1350, 670);
-		setBackground(Color.blue);
+		Color myblue = new Color(80,103,175);
+		setBackground(myblue);
 		setVisible(true);
 		timer  = new Timer(DELAY, new ProjectileListener());
 		timer2 = new Timer(DELAY2, new FListener());
@@ -65,7 +66,22 @@ public class Layered extends JPanel{
 		}
 		g2.fillOval(point1.x, point1.y, gw, gh);
 		
-		g2.setColor(Color.pink);
+		int xPoly[] = {point1.x - 30, point1.x - 30, point1.x + 3};
+        int yPoly[] = {point1.y - 5, point1.y + 30, point1.y + gh/2};
+
+        tail = new Polygon(xPoly, yPoly, xPoly.length);
+        
+		g2.fill(tail);
+		
+		g2.setColor(Color.red);
+		
+		if(hit)
+		{
+			g2.setColor(Color.green);
+			hit = false;
+		}
+		
+		
 		for (Rectangle rect : rList){
 			g2.fill(rect);
 		}
@@ -112,10 +128,6 @@ public class Layered extends JPanel{
 				}
 			}
 			
-//			if(event.getKeyCode() == KeyEvent.VK_ENTER){
-//				
-//			}
-			
 			
 	
 			
@@ -134,26 +146,12 @@ public class Layered extends JPanel{
 //			rList.add(new Rectangle(WIDTH,(int)(Math.random()*HEIGHT),10,20));
 			for (Rectangle rect : rList){
 				rect.x -= SPEED;
+				if(((rect.x >= point1.x) && (rect.x <= (point1.x + gw))) && ((rect.y >= point1.y) && (rect.y <= (point1.y + gh))))
+					hit = true;
+					
 			}
 			repaint();
 			
-//			//moves ball
-//			
-//			proj_x += movex;
-//			proj_y += movey;
-//			
-//			
-//			
-//		
-//			if (x <= 0 || x >= getWidth()-IMAGE_SIZE) //collision with walls
-//				movex = movex * -1;
-//			
-//			if (y <= 0) //collisions with ceiling
-//				movey = movey * -1;
-//			
-//			
-//			if ((y+IMAGE_SIZE == HEIGHT -25) && (x >= point1.x) && (x <= (point1.x+pw)))
-//				movey = movey* -1;
 		}
 	}
 	
