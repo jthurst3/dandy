@@ -14,12 +14,14 @@ public class Token {
 	TokenType type;
 	Rectangle rect;
 	boolean hit;
+	boolean removed;
 
 	public Token(String content, TokenType type, Rectangle rect) {
 		this.content = content;
 		this.type = type;
 		this.rect = rect;
 		this.hit = false;
+		this.removed = false;
 	}
 
 	public String toString() {

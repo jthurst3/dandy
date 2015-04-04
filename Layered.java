@@ -13,10 +13,9 @@ public class Layered extends JPanel{
     
     private final int WIDTH = 1350;
     private final int HEIGHT = 670;
-    private final int SPEED = 10;
+    private final int SPEED = 5;
     private final int DELAY = 20;
     private final int DELAY2 = 1000;
-    // boolean hit = false;
     int gw, gh;
     int rw, rh;
     boolean move = false;
@@ -24,11 +23,14 @@ public class Layered extends JPanel{
     private Timer timer,timer2;
     ArrayList<Token> rList = new ArrayList<Token>();
     Polygon tail = new Polygon();
+    Font font = new Font("TimesRoman", Font.PLAIN, 24);
+
     
     private int[] dir = {0,0};
 
 
-    Parser p = new Parser(rList);
+    Parser p = new Parser();
+    boolean gameOver = false;
     
     
     public Layered()
@@ -78,22 +80,42 @@ public class Layered extends JPanel{
         
         
         for (Token token : rList){
+            if (token.removed) continue;
             // set a rectangle red or green depending on if it was hit
             if (token.hit) {
-                // if it was hit, also see if the new token would produce a syntax error
-                
+                // if it was hit, see if the new token would produce a syntax error
+                boolean valid = p.addAndEvaluate(token);
+                if (!valid) {
+                    gameOver = true;
+                }
+                token.removed = true;
                 // remove the rectangle from the list
-                rList.remove(token);
+                // rList.remove(token);
+            } else {
+                g2.setColor(Color.red);
+                token.hit = false;
+                g2.fill(token.rect);
+                g2.setColor(Color.black);
+                g2.setFont(font);
+                g2.drawString(token.content, token.rect.x, token.rect.y + rh);
             }
-            Color color = (token.hit ? Color.green : Color.red);
-            g2.setColor(color);
-            token.hit = false;
-            g2.fill(token.rect);
-            g2.setColor(Color.black);
-            g2.drawString(token.content, token.rect.x, token.rect.y + rh);
 
         }
-        
+
+        drawCurrentProgram(g2);
+
+
+        if (gameOver) {
+            g2.drawString("GAME OVER", 500, 500);
+        }
+    }
+
+    // draws the text of the user's current program
+    public void drawCurrentProgram(Graphics2D g2) {
+        g2.setColor(Color.black);
+        // http://stackoverflow.com/questions/18249592/how-to-change-font-size-in-drawstring-java
+        g2.setFont(font);
+        g2.drawString(p.currentProgramString, 100, 100);
     }
     
     
@@ -168,7 +190,7 @@ public class Layered extends JPanel{
     {
         
         public void actionPerformed(ActionEvent e){
-            rList.add(new Token("asdf", TokenType.UNDEFINED, new Rectangle(WIDTH,(int)(Math.random()*(HEIGHT-rh)),rw,rh)));
+            rList.add(p.getNewRandomToken(WIDTH, HEIGHT, rw, rh));
         }
     }
 
