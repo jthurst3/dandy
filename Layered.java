@@ -30,8 +30,7 @@ public class Layered extends JPanel{
 
 	String programtext="";
     
-    private int[] dir = {0,0};
-
+    int dir[] = {0,0,0,0};
 
     Parser p = new Parser();
     boolean gameOver = false;
@@ -76,8 +75,8 @@ public class Layered extends JPanel{
 		lastpaint = time;
 		
 		
-		int newx = point1.x + (int)(speed_per_ms*diff*dir[0]);
-		int newy = point1.y + (int)(speed_per_ms*diff*dir[1]);
+		int newx = point1.x + (int)(speed_per_ms*diff*(dir[1]-dir[0]));
+		int newy = point1.y + (int)(speed_per_ms*diff*(dir[3]-dir[2]));
 		if (0 <= newx && newx <= WIDTH-70){
 			point1.x = newx;
 		}
@@ -122,16 +121,22 @@ public class Layered extends JPanel{
                 // remove the rectangle from the list
                 i.remove();
             } else {
-                g2.setColor(Color.red);
-                token.hit = false;
-                g2.fill(token.rect);
+				// trick from http://stackoverflow.com/questions/7679459/thick-border-of-drawn-string
+                //g2.setColor(Color.red);
+                //g2.fill(token.rect);
                 g2.setColor(Color.black);
                 g2.setFont(font);
+                g2.drawString(token.content, token.rect.x-1, token.rect.y + rh-1);
+                g2.drawString(token.content, token.rect.x-1, token.rect.y + rh+1);
+                g2.drawString(token.content, token.rect.x+1, token.rect.y + rh-1);
+                g2.drawString(token.content, token.rect.x+1, token.rect.y + rh+1);
+                g2.setColor(Color.white);
                 g2.drawString(token.content, token.rect.x, token.rect.y + rh);
             }
         }
 		
 		Scanner s = new Scanner(programtext);
+		g2.setColor(Color.black);
 		for(int line=0; s.hasNextLine(); line++){
 			g.drawString(s.nextLine(), 100, 100+20*line);
 		}
@@ -157,13 +162,17 @@ public class Layered extends JPanel{
         
         public void keyReleased(KeyEvent event){
 			switch(event.getKeyCode()){
-			case KeyEvent.VK_RIGHT:
 			case KeyEvent.VK_LEFT:
 				dir[0] = 0;
 				break;
-			case KeyEvent.VK_UP:
-			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_RIGHT:
 				dir[1] = 0;
+				break;
+			case KeyEvent.VK_UP:
+				dir[2] = 0;
+				break;
+			case KeyEvent.VK_DOWN:
+				dir[3] = 0;
 				break;
 			}
         }
@@ -171,17 +180,17 @@ public class Layered extends JPanel{
         public void keyPressed(KeyEvent event)
         {
             switch(event.getKeyCode()){
-			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_LEFT:
 				dir[0] = 1;
 				break;
-			case KeyEvent.VK_LEFT:
-				dir[0] = -1;
-				break;
-			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_RIGHT:
 				dir[1] = 1;
 				break;
 			case KeyEvent.VK_UP:
-				dir[1] = -1;
+				dir[2] = 1;
+				break;
+			case KeyEvent.VK_DOWN:
+				dir[3] = 1;
 				break;
 			}
             repaint();
