@@ -3,15 +3,7 @@
 
 public class Parser {
 
-
-	/** types of tokens:
-	 * Integers
-	 * Variables and functions
-	 * Operators
-	 	=, ==, +, -, *, /, %
-	 * (, ), {, }, ;
-	 * if, elif, else
-	*/
+	Token[] currentTokens;
 
 
 	public Parser() {
