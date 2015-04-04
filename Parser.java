@@ -25,6 +25,7 @@ public class Parser {
 	}
 
 	ArrayList<Token> currentTokens;
+
 	String currentProgramString;
 	int numSuccesses;
 	ArrayList<Token> currentFunctions;
@@ -100,6 +101,11 @@ public class Parser {
 	// public String randomFromList(String[] list) {
 		// return list[(int)(Math.random() * list.length)];
 	// }
+
+
+
+	/** Parsing logic */
+
 
 
 
