@@ -1,0 +1,18 @@
+Method: FunctionStart+Statement
+
+FunctionStart: "function "+Name+Vars
+Name: <any string of letters>
+Vars: LParen+RParen | LParen+VarList+Name+RParen
+VarList: "" | Name+","+VarList
+Body: "" | Statement+Body
+Statement: IfStatement | AssignStatement | BlockStmt
+IfStatement: IfToken+LParen+Expr+RParen
+Expr: SumExpr LessThan SumExpr | SumExpr GreaterThan SumExpr | SumExpr EqEq SumExpr
+SumExpr: ProdExpr | ProdExpr+SumExprList
+SumExprList: "" | Plus+SumExpr+SumExprList | Minus+SumExpr+SumExprList
+ProdExpr: Atom | Atom+ProdExprList
+ProdExprList: Atom+Times+ProdExprList
+Atom: <an integer> | LParen Expr RParen
+AssignStatement: Name+Eq+Expr
+BlockStmt: LBrace StmtList RBrace
+StmtList: "" | Statement+StmtList
