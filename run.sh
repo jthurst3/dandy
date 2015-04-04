@@ -1,3 +1,3 @@
 #!/bin/bash
 
-javac Parser.java && java Parser
+javac *.java && java driver

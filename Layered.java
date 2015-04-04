@@ -16,13 +16,13 @@ public class Layered extends JPanel{
 	private final int SPEED = 10;
 	private final int DELAY = 20;
 	private final int DELAY2 = 1000;
-	boolean hit = false;
+	// boolean hit = false;
 	int gw, gh;
 	int rw, rh;
 	boolean move = false;
 	Point point1 = new Point(100, 500);
 	private Timer timer,timer2;
-	ArrayList<Rectangle> rList = new ArrayList<Rectangle>();
+	ArrayList<Token> rList = new ArrayList<Token>();
 	Polygon tail = new Polygon();
 	
 	private int[] dir = {0,0};
@@ -73,17 +73,21 @@ public class Layered extends JPanel{
         
 		g2.fill(tail);
 		
-		g2.setColor(Color.red);
+		// g2.setColor(Color.red);
 		
-		if(hit)
-		{
-			g2.setColor(Color.green);
-			hit = false;
-		}
+		// if(hit)
+		// {
+		// 	g2.setColor(Color.green);
+		// 	hit = false;
+		// }
 		
 		
-		for (Rectangle rect : rList){
-			g2.fill(rect);
+		for (Token token : rList){
+			// set a rectangle red or green depending on if it was hit
+			Color color = (token.hit ? Color.green : Color.red);
+			g2.setColor(color);
+			token.hit = false;
+			g2.fill(token.rect);
 		}
 		
 	}
@@ -144,10 +148,11 @@ public class Layered extends JPanel{
 		public void actionPerformed (ActionEvent e)
 		{
 //			rList.add(new Rectangle(WIDTH,(int)(Math.random()*HEIGHT),10,20));
-			for (Rectangle rect : rList){
+			for (Token token : rList){
+				Rectangle rect = token.rect;
 				rect.x -= SPEED;
 				if(((rect.x >= point1.x) && (rect.x <= (point1.x + gw))) && ((rect.y >= point1.y) && (rect.y <= (point1.y + gh))))
-					hit = true;
+					token.hit = true;
 					
 			}
 			repaint();
@@ -159,7 +164,7 @@ public class Layered extends JPanel{
 	{
 		
 		public void actionPerformed(ActionEvent e){
-			rList.add(new Rectangle(WIDTH,(int)(Math.random()*(HEIGHT-rh)),rw,rh));
+			rList.add(new Token("asdf", TokenType.UNDEFINED, new Rectangle(WIDTH,(int)(Math.random()*(HEIGHT-rh)),rw,rh)));
 		}
 	}
 
