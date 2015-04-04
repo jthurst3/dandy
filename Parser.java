@@ -17,16 +17,19 @@ public class Parser {
 		currentTokens = new ArrayList<Token>();
 	}
 
-	public void addAndEvaluate(Token t) {
+	/** returns true if adding the token to the list can still make for valid syntax, false otherwise */
+	public boolean addAndEvaluate(Token t) {
 		add(t);
-		evaluate(t);
+		return evaluate();
 	}
 
 	public void add(Token t) {
 		currentTokens.add(t);
 	}
-	public void evaluate(Token t) {
-		
+	/** returns true if the syntax is valid */
+	public boolean evaluate() {
+		// see if the syntax is still valid
+		return true; // stub
 	}
 
 
