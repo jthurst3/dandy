@@ -10,7 +10,7 @@
 10	Statement → AssignStatement	asdf
 11	Statement → BlockStmt	LBrace
 12	Statement → CallStmt	ghjk
-13	IfStatement → IfToken LParen Expr RParen	IfToken
+13	IfStatement → IfToken LParen Expr RParen BlockStmt	IfToken
 14	CallStmt → FnName LParen VarTail Semicolon	ghjk
 15	Expr → SumExpr ExprTail	000, LParen
 16	ExprTail → ε	Semicolon, RParen

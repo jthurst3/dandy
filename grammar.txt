@@ -5,7 +5,7 @@ FnName -> ghjk
 VarTail -> RParen | VarName VarList RParen
 VarList -> EPSILON | , VarName VarList
 Statement -> IfStatement | AssignStatement | BlockStmt | CallStmt
-IfStatement -> IfToken LParen Expr RParen
+IfStatement -> IfToken LParen Expr RParen BlockStmt
 CallStmt -> FnName LParen VarTail Semicolon
 Expr -> SumExpr ExprTail
 ExprTail -> EPSILON | LessThan SumExpr | GreaterThan SumExpr | EqEq SumExpr
