@@ -44,25 +44,24 @@ public class Layered extends JPanel{
     {
         p = new Parser();
 		initlevel(0);
-        System.exit(0);
 		
-		// lastpaint = System.currentTimeMillis();
+		lastpaint = System.currentTimeMillis();
 		
-  //       gw = 50;
-  //       gh = 30;
-  //       rw = 50;
-  //       rh = 20;
-  //       Color myblue = new Color(80,103,175);
-  //       setBackground(myblue);
-  //       setVisible(true);
-  //       timer = new Timer(FRAMEPAUSE, new PaintListener());
-  //       timer2 = new Timer(NEWTOKENPAUSE, new FListener());
+        gw = 50;
+        gh = 30;
+        rw = 50;
+        rh = 20;
+        Color myblue = new Color(80,103,175);
+        setBackground(myblue);
+        setVisible(true);
+        timer = new Timer(FRAMEPAUSE, new PaintListener());
+        timer2 = new Timer(NEWTOKENPAUSE, new FListener());
         
-  //       addKeyListener(new GuppyMover());
-  //       setFocusable(true);
+        addKeyListener(new GuppyMover());
+        setFocusable(true);
         
-  //       timer.start();
-  //       timer2.start();
+        timer.start();
+        timer2.start();
     }
 	
 	public void initlevel(int level){
@@ -135,7 +134,6 @@ public class Layered extends JPanel{
         
         g2.fill(tail);
         
-		
         for (Iterator<Token> i = rList.iterator(); i.hasNext();){
 			Token token = i.next();
             // set a rectangle red or green depending on if it was hit
