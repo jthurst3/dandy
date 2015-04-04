@@ -43,12 +43,8 @@ public class Layered extends JPanel{
     public Layered()
     {
         p = new Parser();
+		initlevel(0);
         System.exit(0);
-		// pList.add(new Token("answer", TokenType.VARIABLE));
-		// pList.add(new Token("=", TokenType.EQ));
-		// pList.add(new Token("1", TokenType.INTEGER));
-		// pList.add(new Token("+", TokenType.PLUS));
-		// pList.add(new Token(";", TokenType.SEMICOLON));
 		
 		// lastpaint = System.currentTimeMillis();
 		

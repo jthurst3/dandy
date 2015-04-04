@@ -211,7 +211,7 @@ public class Parser {
 
 	public int findIndexOfRule(NonterminalType last, Token t) {
 		for (int i = 0; i < rules.length; i++) {
-			System.out.println("comparing nonterminals: " + );
+			System.out.println("comparing nonterminals: " + rules[i].left+" and "+last);
 			if (rules[i].left.equals(last) && member(rules[i].predict, t.type)) {
 				return i;
 			}
