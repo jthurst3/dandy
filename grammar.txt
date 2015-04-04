@@ -1,4 +1,4 @@
-Method -> FunctionStart Statement
+Method -> FunctionStart BlockStmt
 FunctionStart -> function Name Vars
 Name -> asdf
 Vars -> LParen RParen | LParen VarList Name RParen
