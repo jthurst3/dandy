@@ -24,10 +24,11 @@ public class Layered extends JPanel{
     Polygon tail = new Polygon();
     Font font = new Font("TimesRoman", Font.PLAIN, 24);
 	
-	long lastpaint = System.currentTimeMillis();
+	long lastpaint;
     double speed_per_ms = .25;
 	double accel_per_ms = .001;
 	double token_speed_per_ms = .1;
+	double token_max_accel = .005;
 
 	String programtext="";
     
@@ -40,11 +41,13 @@ public class Layered extends JPanel{
     
     public Layered()
     {
-		pList.add(new Token("answer", TokenType.VARIABLE, null));
-		pList.add(new Token("=", TokenType.EQ, null));
-		pList.add(new Token("1", TokenType.INTEGER, null));
-		pList.add(new Token("+", TokenType.PLUS, null));
-		pList.add(new Token(";", TokenType.SEMICOLON, null));
+		pList.add(new Token("answer", TokenType.VARIABLE));
+		pList.add(new Token("=", TokenType.EQ));
+		pList.add(new Token("1", TokenType.INTEGER));
+		pList.add(new Token("+", TokenType.PLUS));
+		pList.add(new Token(";", TokenType.SEMICOLON));
+		
+		lastpaint = System.currentTimeMillis();
 		
         setLayout(new BorderLayout());
         gw = 50;
@@ -117,13 +120,21 @@ public class Layered extends JPanel{
 			Token token = i.next();
             // set a rectangle red or green depending on if it was hit
 
-            Rectangle rect = token.rect;
-            rect.x -= (int)(token_speed_per_ms*diff);
-			if(rect.x < 0){
+			token.vel += ((Math.random()-.5)*2)*token_max_accel;
+			
+			token.y += token.vel*diff;
+
+			if(token.y < 0 || token.y > HEIGHT){
 				i.remove();
 				continue;
 			}
-			if(((rect.x >= point1.x) && (rect.x <= (point1.x + gw))) && ((rect.y >= point1.y) && (rect.y <= (point1.y + gh)))){
+						
+            token.x -= (int)(token_speed_per_ms*diff);
+			if(token.x < 0){
+				i.remove();
+				continue;
+			}
+			if(((token.x >= point1.x) && (token.x <= (point1.x + gw))) && ((token.y >= point1.y) && (token.y <= (point1.y + gh)))){
 				token.hit = true;
 			}
 
@@ -145,12 +156,12 @@ public class Layered extends JPanel{
                 //g2.fill(token.rect);
                 g2.setColor(Color.black);
                 g2.setFont(font);
-                g2.drawString(token.content, token.rect.x-1, token.rect.y + rh-1);
-                g2.drawString(token.content, token.rect.x-1, token.rect.y + rh+1);
-                g2.drawString(token.content, token.rect.x+1, token.rect.y + rh-1);
-                g2.drawString(token.content, token.rect.x+1, token.rect.y + rh+1);
+                g2.drawString(token.content, (int)(token.x-1), (int)(token.y + rh-1));
+                g2.drawString(token.content, (int)(token.x-1), (int)(token.y + rh+1));
+                g2.drawString(token.content, (int)(token.x+1), (int)(token.y + rh-1));
+                g2.drawString(token.content, (int)(token.x+1), (int)(token.y + rh+1));
                 g2.setColor(Color.white);
-                g2.drawString(token.content, token.rect.x, token.rect.y + rh);
+                g2.drawString(token.content, (int)token.x, (int)(token.y + rh));
             }
         }
 		
@@ -228,7 +239,10 @@ public class Layered extends JPanel{
     {
         public void actionPerformed(ActionEvent e){
 			Token t = pList.get((int)(pList.size()*Math.random()));
-            rList.add(new Token(t.content, t.type, new Rectangle(WIDTH,(int)(Math.random()*(HEIGHT-rh)), rw, rh)));
+			Token t2 = new Token(t.content, t.type);
+			t2.x = WIDTH;
+			t2.y = Math.random()*(HEIGHT-rh);
+            rList.add(t2);
         }
     }
 }

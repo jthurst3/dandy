@@ -12,21 +12,19 @@ import java.awt.Rectangle;
 public class Token {
 	String content;
 	TokenType type;
-	Rectangle rect;
+	
 	boolean hit;
-	boolean removed;
+	
+	double x,y;
+	double vel=0.0;
 
-	public Token(String content, TokenType type, Rectangle rect) {
+	public Token(String content, TokenType type) {
 		this.content = content;
 		this.type = type;
-		this.rect = rect;
 		this.hit = false;
-		this.removed = false;
 	}
 
 	public String toString() {
 		return this.content;
 	}
-
-
 }
