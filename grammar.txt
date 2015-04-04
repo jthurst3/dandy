@@ -1,16 +1,19 @@
 Method -> FunctionStart BlockStmt
-FunctionStart -> function Name Vars
+FunctionStart -> function Name LParen VarTail
 Name -> asdf
-Vars -> LParen RParen | LParen VarList Name RParen
-VarList -> EPSILON | Name , VarList
+VarTail -> RParen | Name VarList RParen
+VarList -> EPSILON | , Name VarList
 Body -> EPSILON | Statement Body
 Statement -> IfStatement | AssignStatement | BlockStmt
 IfStatement -> IfToken LParen Expr RParen
-Expr -> SumExpr LessThan SumExpr | SumExpr GreaterThan SumExpr | SumExpr EqEq SumExpr
-SumExpr -> ProdExpr | ProdExpr SumExprList
+Expr -> SumExpr ExprTail
+ExprTail -> EPSILON | LessThan SumExpr | GreaterThan SumExpr | EqEq SumExpr
+SumExpr -> ProdExpr SumExprTail
+SumExprTail -> EPSILON | SumExprList
 SumExprList -> EPSILON | Plus SumExpr SumExprList | Minus SumExpr SumExprList
-ProdExpr -> Atom | Atom ProdExprList
-ProdExprList -> Atom Times ProdExprList
+ProdExpr -> Atom ProdExprTail
+ProdExprTail -> EPSILON | ProdExprList
+ProdExprList -> Times ProdExprList
 Atom -> 000 | LParen Expr RParen
 AssignStatement -> Name Eq Expr
 BlockStmt -> LBrace StmtList RBrace
