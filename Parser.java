@@ -182,12 +182,16 @@ public class Parser {
 	public boolean checkForSyntaxError() {
 		Stack<Object> parsingStack = new Stack<Object>();
 		parsingStack.push(NonterminalType.Method);
+		System.out.println("stack is: " + parsingStack);
 		for (int i = 0; i < currentTokens.size(); i++) {
 			Token t = currentTokens.get(i);
 			Object last = parsingStack.pop();
+			System.out.println("stack is: " + parsingStack);
 			while (t.type != last) {
+				System.out.println("hello");
 				// see if the token type is in the predict set of the current rule
 				int indexOfRule = findIndexOfRule((NonterminalType) last, t);
+				System.out.println(indexOfRule);
 				if (indexOfRule == -1) {
 					return false;
 				}
@@ -195,16 +199,20 @@ public class Parser {
 				for (int j = rules[indexOfRule].predict.length - 1; j >= 0; j--) {
 					parsingStack.push(rules[indexOfRule].predict[j]);
 				}
+				System.out.println("stack is: " + parsingStack);
 				last = parsingStack.pop();
+				System.out.println("stack is: " + parsingStack);
 			}
 			parsingStack.pop();
+			System.out.println("stack is: " + parsingStack);
 		}
 		return true;
 	}
 
 	public int findIndexOfRule(NonterminalType last, Token t) {
 		for (int i = 0; i < rules.length; i++) {
-			if (rules[i].left == last && member(rules[i].predict, t.type)) {
+			System.out.println("comparing nonterminals: " + );
+			if (rules[i].left.equals(last) && member(rules[i].predict, t.type)) {
 				return i;
 			}
 		}

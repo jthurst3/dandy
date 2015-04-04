@@ -20,7 +20,7 @@ public class Layered extends JPanel{
 		
     Point point1 = new Point(100, 500);
     private Timer timer,timer2;
-    ArrayList<Token> rList;
+    ArrayList<Token> rList = new ArrayList<Token>();
 	ArrayList<Token> pList = new ArrayList<Token>();
     Polygon tail = new Polygon();
     Font font = new Font("TimesRoman", Font.PLAIN, 24);
@@ -31,36 +31,42 @@ public class Layered extends JPanel{
 	double token_speed_per_ms = .1;
 	double token_max_accel = .005;
 
-	String programtext;
+	String programtext="";
     
     int dir[] = {0,0,0,0};
 	double vel[] = {0.0, 0.0};
 
-    Parser p = new Parser();
+    Parser p;
     boolean gameOver = false;
   
     
     public Layered()
     {
-		initlevel(1);
+        p = new Parser();
+        System.exit(0);
+		// pList.add(new Token("answer", TokenType.VARIABLE));
+		// pList.add(new Token("=", TokenType.EQ));
+		// pList.add(new Token("1", TokenType.INTEGER));
+		// pList.add(new Token("+", TokenType.PLUS));
+		// pList.add(new Token(";", TokenType.SEMICOLON));
 		
-		lastpaint = System.currentTimeMillis();
+		// lastpaint = System.currentTimeMillis();
 		
-        gw = 50;
-        gh = 30;
-        rw = 50;
-        rh = 20;
-        Color myblue = new Color(80,103,175);
-        setBackground(myblue);
-        setVisible(true);
-        timer = new Timer(FRAMEPAUSE, new PaintListener());
-        timer2 = new Timer(NEWTOKENPAUSE, new FListener());
+  //       gw = 50;
+  //       gh = 30;
+  //       rw = 50;
+  //       rh = 20;
+  //       Color myblue = new Color(80,103,175);
+  //       setBackground(myblue);
+  //       setVisible(true);
+  //       timer = new Timer(FRAMEPAUSE, new PaintListener());
+  //       timer2 = new Timer(NEWTOKENPAUSE, new FListener());
         
-        addKeyListener(new GuppyMover());
-        setFocusable(true);
+  //       addKeyListener(new GuppyMover());
+  //       setFocusable(true);
         
-        timer.start();
-        timer2.start();
+  //       timer.start();
+  //       timer2.start();
     }
 	
 	public void initlevel(int level){
