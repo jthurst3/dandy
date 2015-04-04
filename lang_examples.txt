@@ -30,7 +30,20 @@ function levelseven(x){
 
 function leveleight(x,y){
 	if(x > y){
-		return x;
+		answer = x;
+	} else {
+		answer = y;
 	}
-	return y;
+}
+
+function levelnine(x,y,z){
+	answer = leveleight(leveleight(x,y),z);
+}
+
+function levelten(x){
+	if(x > 0){
+		answer = levelten(x-1) + levelten(x-2);
+	} else {
+		answer = 1;
+	}
 }
