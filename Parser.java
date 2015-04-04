@@ -60,9 +60,9 @@ public class Parser {
 	public void initializeRules() {
 		rules = new Rule[34];
 		rules[0] = new Rule(NonterminalType.Method, new Object[] {NonterminalType.FunctionStart, NonterminalType.BlockStmt},
-			new TokenType[] {TokenType.FUNCTION});
-		rules[1] = new Rule(NonterminalType.FunctionStart, new Object[] {TokenType.FUNCTION, NonterminalType.FnName, TokenType.LPAREN, NonterminalType.VarTail},
-			new TokenType[] {TokenType.FUNCTION});
+			new TokenType[] {TokenType.FUNCTIONSTART});
+		rules[1] = new Rule(NonterminalType.FunctionStart, new Object[] {TokenType.FUNCTIONSTART, NonterminalType.FnName, TokenType.LPAREN, NonterminalType.VarTail},
+			new TokenType[] {TokenType.FUNCTIONSTART});
 		rules[2] = new Rule(NonterminalType.VarName, new Object[] {TokenType.VARIABLE},
 			new TokenType[] {TokenType.VARIABLE});
 		rules[3] = new Rule(NonterminalType.FnName, new Object[] {TokenType.FUNCTION},
@@ -181,14 +181,26 @@ public class Parser {
 	/** returns true if the syntax is still valid after adding a new token */
 	public boolean checkForSyntaxError() {
 		Stack<Object> parsingStack = new Stack<Object>();
+		ArrayList<Token> interimTokens = new ArrayList<Token>();
 		parsingStack.push(NonterminalType.Method);
 		System.out.println("stack is: " + parsingStack);
 		for (int i = 0; i < currentTokens.size(); i++) {
 			Token t = currentTokens.get(i);
+			if (parsingStack.isEmpty()) {
+				return true;
+			}
 			Object last = parsingStack.pop();
 			System.out.println("stack is: " + parsingStack);
-			while (t.type != last) {
-				System.out.println("hello");
+			while (!(t.type.getClass().equals(last.getClass()) && t.type.name().equals(((TokenType)last).name()))) {
+				boolean classTest = t.type.getClass().equals(last.getClass());
+				if (classTest) {
+					boolean nameTest = t.type.name().equals(((TokenType)last).name());
+					System.out.println(t.type.name());
+					System.out.println(((TokenType) last).name());
+					System.out.println("class test is: " + classTest + " and name test is: " + nameTest);
+				} else {
+					System.out.println("class test returned false");
+				}
 				// see if the token type is in the predict set of the current rule
 				int indexOfRule = findIndexOfRule((NonterminalType) last, t);
 				System.out.println(indexOfRule);
@@ -196,22 +208,26 @@ public class Parser {
 					return false;
 				}
 				// add things back to the stack
-				for (int j = rules[indexOfRule].predict.length - 1; j >= 0; j--) {
-					parsingStack.push(rules[indexOfRule].predict[j]);
+				for (int j = rules[indexOfRule].right.length - 1; j >= 0; j--) {
+					parsingStack.push(rules[indexOfRule].right[j]);
 				}
 				System.out.println("stack is: " + parsingStack);
+				if (parsingStack.isEmpty()) {
+					return true;
+				}
 				last = parsingStack.pop();
 				System.out.println("stack is: " + parsingStack);
 			}
-			parsingStack.pop();
 			System.out.println("stack is: " + parsingStack);
+			interimTokens.add(currentTokens.get(i));
+			System.out.println("interim tokens is; " + interimTokens);
 		}
 		return true;
 	}
 
 	public int findIndexOfRule(NonterminalType last, Token t) {
 		for (int i = 0; i < rules.length; i++) {
-			System.out.println("comparing nonterminals: " + rules[i].left+" and "+last);
+			// System.out.println("comparing nonterminals: " + rules[i].left+" and "+last + " with result " + rules[i].left.equals(last));
 			if (rules[i].left.equals(last) && member(rules[i].predict, t.type)) {
 				return i;
 			}
@@ -219,8 +235,9 @@ public class Parser {
 		return -1;
 	}
 
-	public boolean member(Object[] list, Object elem) {
+	public boolean member(Object[] list, TokenType elem) {
 		for (int i = 0; i < list.length; i++) {
+			// System.out.println("comparing " + list[i] + " with " + elem + " with result = "  + (list[i].equals(elem)));
 			if (list[i].equals(elem)) {
 				return true;
 			}
