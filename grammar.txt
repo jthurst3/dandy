@@ -1,11 +1,12 @@
 Method -> FunctionStart BlockStmt
-FunctionStart -> function Name LParen VarTail
-Name -> asdf
-VarTail -> RParen | Name VarList RParen
-VarList -> EPSILON | , Name VarList
+FunctionStart -> function FnName LParen VarTail
+VarName -> asdf
+FnName -> ghjk
+VarTail -> RParen | VarName VarList RParen
+VarList -> EPSILON | , VarName VarList
 Statement -> IfStatement | AssignStatement | BlockStmt | CallStmt
 IfStatement -> IfToken LParen Expr RParen
-CallStmt -> Name LParen VarTail Semicolon
+CallStmt -> FnName LParen VarTail Semicolon
 Expr -> SumExpr ExprTail
 ExprTail -> EPSILON | LessThan SumExpr | GreaterThan SumExpr | EqEq SumExpr
 SumExpr -> ProdExpr SumExprTail
@@ -15,6 +16,6 @@ ProdExpr -> Atom ProdExprTail
 ProdExprTail -> EPSILON | ProdExprList
 ProdExprList -> Times ProdExprList
 Atom -> 000 | LParen Expr RParen
-AssignStatement -> Name Eq Expr Semicolon
+AssignStatement -> VarName Eq Expr Semicolon
 BlockStmt -> LBrace StmtList RBrace
 StmtList -> EPSILON | Statement StmtList
