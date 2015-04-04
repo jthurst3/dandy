@@ -14,8 +14,7 @@ import javax.imageio.ImageIO;
 import java.io.*;
 
 public class Layered extends JPanel{
-	int curr_scroll = 0;
-    
+	int currlevel;
     private final int FRAMEPAUSE = 20;
     private final int NEWTOKENPAUSE = 1000;
     int gw=50, gh=30;
@@ -42,6 +41,8 @@ public class Layered extends JPanel{
 
 	Image testpic;
     Parser p;
+	
+	ArrayList<Rectangle> obstacles;
     
     public Layered()
     {
@@ -66,6 +67,14 @@ public class Layered extends JPanel{
     }
 	
 	public void initlevel(int level){
+		currlevel = level;
+		
+		obstacles = new ArrayList<Rectangle>(10);
+		obstacles.add(new Rectangle(0,0,400,400));
+		obstacles.add(new Rectangle(600,200,50,50));
+		obstacles.add(new Rectangle(600,400,50,50));
+		obstacles.add(new Rectangle(1600,0,200,200));
+		
         p = new Parser();
 
 		pList = new ArrayList<Token>();
@@ -102,9 +111,10 @@ public class Layered extends JPanel{
 		g.setFont(font);
 		g.setColor(Color.black);
 		
-		// paint start block
-		if(mapx < 450 && mapy < 450){
-			g.drawImage(testpic,-(int)mapx,-(int)mapy,450,450,Color.black,this);
+		for(Rectangle r: obstacles){
+			if(r.getX() + r.getWidth() > mapx && r.getX() < mapx+getWidth()){
+				g.drawImage(testpic, (int)(r.getX()-mapx), (int)(r.getY()-mapy), (int)r.getWidth(), (int)r.getHeight(), Color.black, this);
+			}
 		}
 		
         Graphics2D g2 = (Graphics2D) g;
@@ -137,8 +147,14 @@ public class Layered extends JPanel{
 			newy = mapy+getHeight()-gh;
 			vel[1] = 0;
 		}
-		myx = newx;
-		myy = newy;
+
+		if(conflicts(new Rectangle((int)newx,(int)newy,gw,gh))){
+			vel[0] = 0;
+			vel[1] = 0;
+		} else {
+			myx = newx;
+			myy = newy;
+		}
 		
 		double map_velocity = (newx-(mapx+2.0*getWidth()/3))/1000.0;
 		if(map_velocity < 0) map_velocity = 0;
@@ -180,11 +196,8 @@ public class Layered extends JPanel{
 
                 boolean valid = p.addAndEvaluate(token);
                 if (!valid) {
-					timer.stop();
-					timer2.stop();
-					SwingUtilities.getWindowAncestor(this).setVisible(false);
-					SwingUtilities.getWindowAncestor(this).dispose();
-					JOptionPane.showMessageDialog(null, "Syntax error, game over!"); 
+					initlevel(currlevel);
+					return;
 				}
                 // remove the rectangle from the list
                 i.remove();
@@ -278,4 +291,11 @@ public class Layered extends JPanel{
             rList.add(t2);
         }
     }
+	
+	boolean conflicts(Rectangle test){
+		for(Rectangle r: obstacles){
+			if(test.intersects(r)) return true;
+		}
+		return false;
+	}
 }
