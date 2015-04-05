@@ -429,6 +429,12 @@ public class Layered extends JPanel{
 	}
 
 
+    // stub, note that Doug is gonna write this function out in another file
+    BigInteger evaluate(int level, ArrayList<Token> tokens) {
+        return BigInteger.ONE; // stub
+    }
+
+
 
     boolean test(int level, ArrayList<BigInteger> inputs) {
         switch (level) {
@@ -457,7 +463,7 @@ public class Layered extends JPanel{
         }
     }
     boolean testLevel1(ArrayList<BigInteger> inputs) {
-        return true; // stub
+        return evaluate(1, rList).equals(BigInteger.ONE); // stub
     }
     boolean testLevel2(ArrayList<BigInteger> inputs) {
         return true; // stub
