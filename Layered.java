@@ -551,15 +551,15 @@ public class Layered extends JPanel{
     }
     boolean testLevel1() {
         ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
-        return evaluate(1, inputs).equals(BigInteger.ONE);
+        return (BigInteger.ONE == evaluate(1, inputs));
     }
     boolean testLevel2() {
         ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
-        return evaluate(2, inputs).equals(new BigInteger("2"));
+        return (new BigInteger("2") == evaluate(2, inputs));
     }
     boolean testLevel3() {
         ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
-        return evaluate(3, inputs).equals(new BigInteger("4"));
+        return (new BigInteger("4") == evaluate(3, inputs));
     }
     boolean testLevel4() {
         ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
@@ -567,7 +567,7 @@ public class Layered extends JPanel{
             BigInteger bi = new BigInteger(32, rand);
             bi = bi.subtract(new BigInteger("2147483648")); // 2^31
             inputs.add(bi);
-            boolean passed = (evaluate(4, inputs).equals(computeAnswerLevel4(inputs)));
+            boolean passed = (evaluate(4, inputs) == computeAnswerLevel4(inputs));
             if (!passed) {
                 return false;
             }
@@ -580,7 +580,7 @@ public class Layered extends JPanel{
             BigInteger bi = new BigInteger(32, rand);
             bi = bi.subtract(new BigInteger("2147483648")); // 2^31
             inputs.add(bi);
-            boolean passed = (evaluate(5, inputs).equals(computeAnswerLevel5(inputs)));
+            boolean passed = (evaluate(5, inputs) == computeAnswerLevel5(inputs));
             if (!passed) {
                 return false;
             }
@@ -593,7 +593,7 @@ public class Layered extends JPanel{
             BigInteger bi = new BigInteger(32, rand);
             bi = bi.subtract(new BigInteger("2147483648")); // 2^31
             inputs.add(bi);
-            boolean passed = (evaluate(6, inputs).equals(computeAnswerLevel6(inputs)));
+            boolean passed = (evaluate(6, inputs) == computeAnswerLevel6(inputs));
             if (!passed) {
                 return false;
             }
@@ -606,7 +606,7 @@ public class Layered extends JPanel{
             BigInteger bi = new BigInteger(32, rand);
             bi = bi.subtract(new BigInteger("2147483648")); // 2^31
             inputs.add(bi);
-            boolean passed = (evaluate(7, inputs).equals(computeAnswerLevel7(inputs)));
+            boolean passed = (evaluate(7, inputs) == computeAnswerLevel7(inputs));
             if (!passed) {
                 return false;
             }
@@ -622,7 +622,7 @@ public class Layered extends JPanel{
             BigInteger bi2 = new BigInteger(32, rand);
             bi2 = bi2.subtract(new BigInteger("2147483648")); // 2^31
             inputs.add(bi2);
-            boolean passed = (evaluate(8, inputs).equals(computeAnswerLevel8(inputs)));
+            boolean passed = (evaluate(8, inputs) == computeAnswerLevel8(inputs));
             if (!passed) {
                 return false;
             }
@@ -638,7 +638,7 @@ public class Layered extends JPanel{
             BigInteger bi2 = new BigInteger(32, rand);
             bi2 = bi2.subtract(new BigInteger("2147483648")); // 2^31
             inputs.add(bi2);
-            boolean passed = (evaluate(9, inputs).equals(computeAnswerLevel9(inputs)));
+            boolean passed = (evaluate(9, inputs) == computeAnswerLevel9(inputs));
             if (!passed) {
                 return false;
             }
@@ -650,7 +650,7 @@ public class Layered extends JPanel{
         for (int i = 0; i < 10; i++) {
             BigInteger bi = new BigInteger("" + i);
             inputs.add(bi);
-            boolean passed = (evaluate(10, inputs).equals(computeAnswerLevel10(inputs)));
+            boolean passed = (evaluate(10, inputs) == computeAnswerLevel10(inputs));
             if (!passed) {
                 return false;
             }
