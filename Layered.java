@@ -65,45 +65,170 @@ public class Layered extends JPanel{
         timer.start();
         timer2.start();
     }
-	
-	public void initlevel(int level){
-		currlevel = level;
-		
-		obstacles = new ArrayList<Rectangle>(10);
-		obstacles.add(new Rectangle(0,0,400,400));
-		obstacles.add(new Rectangle(600,200,50,50));
-		obstacles.add(new Rectangle(600,400,50,50));
-		obstacles.add(new Rectangle(1600,0,200,200));
-		
+
+    public void initlevel(int level){
+        currlevel = level;
+        
+        obstacles = new ArrayList<Rectangle>(10);
+        
+        obstacles.add(new Rectangle(0,0,400,400));
+        obstacles.add(new Rectangle(600,200,50,50));
+        obstacles.add(new Rectangle(600,400,50,50));
+        obstacles.add(new Rectangle(1600,0,200,200));
+        
         p = new Parser();
+        pList = new ArrayList<Token>();
+        rList = new ArrayList<Token>();
+        rList.add(new Token("function", TokenType.FUNCTIONSTART));
+        rList.add(new Token("level" + level, TokenType.FUNCTION));
+        rList.add(new Token("(", TokenType.LPAREN));
+        
+        pList.add(new Token("answer", TokenType.VARIABLE));
+        
+        switch(level)
+        {
+        case 1:
+            pList.add(new Token("=", TokenType.EQ));
+            pList.add(new Token("1", TokenType.INTEGER));
+            pList.add(new Token(";", TokenType.SEMICOLON));
+            break;
+        
+        case 2:
+            pList.add(new Token("=", TokenType.EQ));
+            pList.add(new Token("1", TokenType.INTEGER));
+            pList.add(new Token("+", TokenType.PLUS));
+            pList.add(new Token(";", TokenType.SEMICOLON));
+            break;
+            
+        case 3:
+            pList.add(new Token("=", TokenType.EQ));
+            pList.add(new Token("1", TokenType.INTEGER));
+            pList.add(new Token("+", TokenType.PLUS));
+            pList.add(new Token("*", TokenType.TIMES));
+            pList.add(new Token("(", TokenType.LPAREN));
+            pList.add(new Token(")", TokenType.RPAREN));
+            pList.add(new Token(";", TokenType.SEMICOLON));
+            break;
+            
+        case 4:
+            pList.add(new Token("=", TokenType.EQ));
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token(";", TokenType.SEMICOLON));
 
-		pList = new ArrayList<Token>();
-		pList.add(new Token("answer", TokenType.VARIABLE));
-		pList.add(new Token("=", TokenType.EQ));
-		pList.add(new Token("1", TokenType.INTEGER));
-		pList.add(new Token("+", TokenType.PLUS));
-		pList.add(new Token(";", TokenType.SEMICOLON));
+            rList.add(new Token("x", TokenType.VARIABLE));
+            break;
+            
+        case 5:
+            pList.add(new Token("=", TokenType.EQ));
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("+", TokenType.PLUS));
+            pList.add(new Token(";", TokenType.SEMICOLON));
+
+            rList.add(new Token("x", TokenType.VARIABLE));
+            break;
+        
+        case 6:
+            pList.add(new Token("=", TokenType.EQ));
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("y", TokenType.VARIABLE));
+            pList.add(new Token("+", TokenType.PLUS));
+            pList.add(new Token("*", TokenType.TIMES));
+            pList.add(new Token(";", TokenType.SEMICOLON));
+
+            rList.add(new Token("x", TokenType.VARIABLE));
+            break;
+            
+        case 7:
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("y", TokenType.VARIABLE));
+            pList.add(new Token("=", TokenType.EQ));
+            pList.add(new Token("levelsix", TokenType.FUNCTION));
+            pList.add(new Token("(", TokenType.LPAREN));
+            pList.add(new Token(")", TokenType.RPAREN));
+            pList.add(new Token(";", TokenType.SEMICOLON));
+
+            rList.add(new Token("x", TokenType.VARIABLE));
+            break;
+            
+            
+        case 8:
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("y", TokenType.VARIABLE));
+            pList.add(new Token("=", TokenType.EQ));
+            pList.add(new Token("(", TokenType.LPAREN));
+            pList.add(new Token(")", TokenType.RPAREN));
+            pList.add(new Token("{", TokenType.LBRACE));
+            pList.add(new Token("}", TokenType.RBRACE));
+            pList.add(new Token(">", TokenType.GREATERTHAN));
+            pList.add(new Token("if", TokenType.IF));
+            pList.add(new Token("else", TokenType.ELSE));
+            pList.add(new Token(";", TokenType.SEMICOLON));
+
+            rList.add(new Token("x", TokenType.VARIABLE));
+            rList.add(new Token(",", TokenType.COMMA));
+            rList.add(new Token("y", TokenType.VARIABLE));
+            break;
+            
+        case 9:
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("y", TokenType.VARIABLE));
+            pList.add(new Token("z", TokenType.VARIABLE));
+            pList.add(new Token("(", TokenType.LPAREN));
+            pList.add(new Token(")", TokenType.RPAREN));
+            pList.add(new Token("=", TokenType.EQ));
+            pList.add(new Token("leveleight", TokenType.FUNCTION));
+            pList.add(new Token(",", TokenType.COMMA));
+            pList.add(new Token(";", TokenType.SEMICOLON));
+
+            rList.add(new Token("x", TokenType.VARIABLE));
+            rList.add(new Token(",", TokenType.COMMA));
+            rList.add(new Token("y", TokenType.VARIABLE));
+            rList.add(new Token(",", TokenType.COMMA));
+            rList.add(new Token("z", TokenType.VARIABLE));
+            break;
+            
+        case 10:
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("=", TokenType.EQ));
+            pList.add(new Token("+", TokenType.PLUS));
+            pList.add(new Token("(", TokenType.LPAREN));
+            pList.add(new Token(")", TokenType.RPAREN));
+            pList.add(new Token("{", TokenType.LBRACE));
+            pList.add(new Token("}", TokenType.RBRACE));
+            pList.add(new Token(">", TokenType.GREATERTHAN));
+            pList.add(new Token("if", TokenType.IF));
+            pList.add(new Token("else", TokenType.ELSE));
+            pList.add(new Token(";", TokenType.SEMICOLON));
+            pList.add(new Token("0", TokenType.INTEGER));
+            pList.add(new Token("1", TokenType.INTEGER));
+            pList.add(new Token("2", TokenType.INTEGER));
+            pList.add(new Token("levelten", TokenType.FUNCTION));
+            pList.add(new Token("-", TokenType.MINUS));
+
+            rList.add(new Token("x", TokenType.VARIABLE));
+            break;  
+        
+        }
+
+        
+        
 
 
-		rList = new ArrayList<Token>();
-		rList.add(new Token("function", TokenType.FUNCTIONSTART));
-		rList.add(new Token("level" + level, TokenType.FUNCTION));
-		rList.add(new Token("(", TokenType.LPAREN));
-		rList.add(new Token(")", TokenType.RPAREN));
-		rList.add(new Token("{", TokenType.LBRACE));
-		StringBuilder sb = new StringBuilder();
-		for(Token t: rList){
-			sb = sb.append(t.content).append(" ");
-			p.addAndEvaluate(t);
-		}
-		programtext = sb.append("\n").toString();
-		
-		myx = 100.0;
-		myy = 500.0;
-		
-		mapx = 0.0;
-		mapy = 0.0;
-	}
+        rList.add(new Token(")", TokenType.RPAREN));
+        rList.add(new Token("{", TokenType.LBRACE));
+        StringBuilder sb = new StringBuilder();
+        for(Token t: rList){
+            sb = sb.append(t.content).append(" ");
+            p.addAndEvaluate(t);
+        }
+        programtext = sb.append("\n").toString();
+        
+        myx = 100.0;
+        myy = 500.0;
+        
+        mapx = 0.0;
+        mapy = 0.0;
+    }
     
     public void paintComponent(Graphics g)
     {
