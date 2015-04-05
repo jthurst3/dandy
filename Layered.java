@@ -69,7 +69,6 @@ public class Layered extends JPanel{
         } catch(Exception e){
             System.exit(0);
         }
-		initlevel(1);
 		
 		lastpaint = System.currentTimeMillis();
 		
@@ -83,13 +82,15 @@ public class Layered extends JPanel{
         
         timer.start();
         timer2.start();
+
+        initlevel(1);
     }
 	
 	public void initlevel(int level){
 		currlevel = level;
 
 		things = new ArrayList<Thing>(10);
-		things.add(new Thing(new Rectangle(0,0,400,590), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+		things.add(new Thing(new Rectangle(0,0,400,590), Thing.ThingType.OBSTACLE, pics[3]));
 		things.add(new Thing(new Rectangle(80, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("function ", TokenType.FUNCTIONSTART)));
 		things.add(new Thing(new Rectangle(170, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("level"+level, TokenType.FUNCTION)));
 		things.add(new Thing(new Rectangle(240, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("(", TokenType.LPAREN)));
@@ -278,6 +279,9 @@ public class Layered extends JPanel{
 			newx = mapx+getWidth()-gw;
 			vel[0] = 0;
 		}
+        if (newx < 0) {
+            newx = 0;
+        }
 		if(newy < mapy){
 			newy = mapy;
 			vel[1] = 0;
