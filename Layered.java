@@ -83,19 +83,14 @@ public class Layered extends JPanel{
         timer.start();
         timer2.start();
 
-        initlevel(1);
+        initlevel(4);
     }
 	
 	public void initlevel(int level){
 		currlevel = level;
 
 		things = new ArrayList<Thing>(10);
-		things.add(new Thing(new Rectangle(0,0,400,590), Thing.ThingType.OBSTACLE, pics[3]));
-		things.add(new Thing(new Rectangle(80, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("function ", TokenType.FUNCTIONSTART)));
-		things.add(new Thing(new Rectangle(170, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("level"+level, TokenType.FUNCTION)));
-		things.add(new Thing(new Rectangle(240, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("(", TokenType.LPAREN)));
-		things.add(new Thing(new Rectangle(380, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token(")", TokenType.RPAREN)));
-		things.add(new Thing(new Rectangle(400, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("{", TokenType.LBRACE)));
+		initializeHeader(level, things);
 		
 		programtext = "";
 				
@@ -249,6 +244,52 @@ public class Layered extends JPanel{
 		
 		mapx = 0.0;
 		mapy = 0.0;
+    }
+
+    public void initializeHeader(int level, ArrayList<Thing> things) {
+        things.add(new Thing(new Rectangle(0,0,400,590), Thing.ThingType.OBSTACLE, pics[3]));
+        things.add(new Thing(new Rectangle(80, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("function ", TokenType.FUNCTIONSTART)));
+        things.add(new Thing(new Rectangle(170, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("level"+level, TokenType.FUNCTION)));
+        things.add(new Thing(new Rectangle(220, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("(", TokenType.LPAREN)));
+        switch (level) {
+            case 1:
+            break;
+            case 2:
+            break;
+            case 3:
+            break;
+            case 4:
+            things.add(new Thing(new Rectangle(300, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("x", TokenType.VARIABLE)));
+            break;
+            case 5:
+            things.add(new Thing(new Rectangle(300, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("x", TokenType.VARIABLE)));
+            break;
+            case 6:
+            things.add(new Thing(new Rectangle(300, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("x", TokenType.VARIABLE)));
+            break;
+            case 7:
+            things.add(new Thing(new Rectangle(300, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("x", TokenType.VARIABLE)));
+            break;
+            case 8:
+            things.add(new Thing(new Rectangle(300, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("x", TokenType.VARIABLE)));
+            things.add(new Thing(new Rectangle(320, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token(",", TokenType.COMMA)));
+            things.add(new Thing(new Rectangle(340, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("y", TokenType.VARIABLE)));
+            break;
+            case 9:
+            things.add(new Thing(new Rectangle(260, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("x", TokenType.VARIABLE)));
+            things.add(new Thing(new Rectangle(280, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token(",", TokenType.COMMA)));
+            things.add(new Thing(new Rectangle(310, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("y", TokenType.VARIABLE)));
+            things.add(new Thing(new Rectangle(330, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token(",", TokenType.COMMA)));
+            things.add(new Thing(new Rectangle(360, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("z", TokenType.VARIABLE)));
+            break;
+            case 10:
+            things.add(new Thing(new Rectangle(300, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("x", TokenType.VARIABLE)));
+            break;
+            default: System.out.println("should never get here!!!");
+            break;
+        }
+        things.add(new Thing(new Rectangle(380, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token(")", TokenType.RPAREN)));
+        things.add(new Thing(new Rectangle(400, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("{", TokenType.LBRACE)));
     }
     
     public void paintComponent(Graphics g)
