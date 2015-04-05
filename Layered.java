@@ -41,6 +41,9 @@ public class Layered extends JPanel{
     int dir[] = {0,0,0,0};
 	double vel[] = {0.0, 0.0};
 
+    private final int DEFAULT_NUM_TEST_CASES = 100;
+    Random rand = new Random();
+
 	Image testpic;
     Parser p;
 	
@@ -430,66 +433,215 @@ public class Layered extends JPanel{
 
 
     // stub, note that Doug is gonna write this function out in another file
-    BigInteger evaluate(int level, ArrayList<Token> tokens) {
+    BigInteger evaluate(int level, ArrayList<BigInteger> inputs) {
         return BigInteger.ONE; // stub
     }
 
 
 
-    boolean test(int level, ArrayList<BigInteger> inputs) {
+    boolean test(int level) {
         switch (level) {
             case 1:
-            return testLevel1(inputs);
+            return testLevel1();
             case 2:
-            return testLevel2(inputs);
+            return testLevel2();
             case 3:
-            return testLevel3(inputs);
+            return testLevel3();
             case 4:
-            return testLevel4(inputs);
+            return testLevel4();
             case 5:
-            return testLevel5(inputs);
+            return testLevel5();
             case 6:
-            return testLevel6(inputs);
+            return testLevel6();
             case 7:
-            return testLevel7(inputs);
+            return testLevel7();
             case 8:
-            return testLevel8(inputs);
+            return testLevel8();
             case 9:
-            return testLevel9(inputs);
+            return testLevel9();
             case 10:
-            return testLevel10(inputs);
+            return testLevel10();
             default:
             return false;
         }
     }
-    boolean testLevel1(ArrayList<BigInteger> inputs) {
-        return evaluate(1, rList).equals(BigInteger.ONE); // stub
+    boolean testLevel1() {
+        ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
+        return evaluate(1, inputs).equals(BigInteger.ONE);
     }
-    boolean testLevel2(ArrayList<BigInteger> inputs) {
-        return true; // stub
+    boolean testLevel2() {
+        ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
+        return evaluate(2, inputs).equals(new BigInteger("2"));
     }
-    boolean testLevel3(ArrayList<BigInteger> inputs) {
-        return true; // stub
+    boolean testLevel3() {
+        ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
+        return evaluate(3, inputs).equals(new BigInteger("4"));
     }
-    boolean testLevel4(ArrayList<BigInteger> inputs) {
-        return true; // stub
+    boolean testLevel4() {
+        ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
+        for (int i = 0; i < DEFAULT_NUM_TEST_CASES; i++) {
+            BigInteger bi = new BigInteger(32, rand);
+            bi = bi.subtract(new BigInteger("2147483648")); // 2^31
+            inputs.add(bi);
+            boolean passed = (evaluate(4, inputs).equals(computeAnswerLevel4(inputs)));
+            if (!passed) {
+                return false;
+            }
+        }
+        return true;
     }
-    boolean testLevel5(ArrayList<BigInteger> inputs) {
-        return true; // stub
+    boolean testLevel5() {
+        ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
+        for (int i = 0; i < DEFAULT_NUM_TEST_CASES; i++) {
+            BigInteger bi = new BigInteger(32, rand);
+            bi = bi.subtract(new BigInteger("2147483648")); // 2^31
+            inputs.add(bi);
+            boolean passed = (evaluate(5, inputs).equals(computeAnswerLevel5(inputs)));
+            if (!passed) {
+                return false;
+            }
+        }
+        return true;
     }
-    boolean testLevel6(ArrayList<BigInteger> inputs) {
-        return true; // stub
+    boolean testLevel6() {
+        ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
+        for (int i = 0; i < DEFAULT_NUM_TEST_CASES; i++) {
+            BigInteger bi = new BigInteger(32, rand);
+            bi = bi.subtract(new BigInteger("2147483648")); // 2^31
+            inputs.add(bi);
+            boolean passed = (evaluate(6, inputs).equals(computeAnswerLevel6(inputs)));
+            if (!passed) {
+                return false;
+            }
+        }
+        return true;
     }
-    boolean testLevel7(ArrayList<BigInteger> inputs) {
-        return true; // stub
+    boolean testLevel7() {
+        ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
+        for (int i = 0; i < DEFAULT_NUM_TEST_CASES; i++) {
+            BigInteger bi = new BigInteger(32, rand);
+            bi = bi.subtract(new BigInteger("2147483648")); // 2^31
+            inputs.add(bi);
+            boolean passed = (evaluate(7, inputs).equals(computeAnswerLevel7(inputs)));
+            if (!passed) {
+                return false;
+            }
+        }
+        return true;
     }
-    boolean testLevel8(ArrayList<BigInteger> inputs) {
-        return true; // stub
+    boolean testLevel8() {
+        ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
+        for (int i = 0; i < DEFAULT_NUM_TEST_CASES; i++) {
+            BigInteger bi = new BigInteger(32, rand);
+            bi = bi.subtract(new BigInteger("2147483648")); // 2^31
+            inputs.add(bi);
+            BigInteger bi2 = new BigInteger(32, rand);
+            bi2 = bi2.subtract(new BigInteger("2147483648")); // 2^31
+            inputs.add(bi2);
+            boolean passed = (evaluate(8, inputs).equals(computeAnswerLevel8(inputs)));
+            if (!passed) {
+                return false;
+            }
+        }
+        return true;
     }
-    boolean testLevel9(ArrayList<BigInteger> inputs) {
-        return true; // stub
+    boolean testLevel9() {
+        ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
+        for (int i = 0; i < DEFAULT_NUM_TEST_CASES; i++) {
+            BigInteger bi = new BigInteger(32, rand);
+            bi = bi.subtract(new BigInteger("2147483648")); // 2^31
+            inputs.add(bi);
+            BigInteger bi2 = new BigInteger(32, rand);
+            bi2 = bi2.subtract(new BigInteger("2147483648")); // 2^31
+            inputs.add(bi2);
+            boolean passed = (evaluate(9, inputs).equals(computeAnswerLevel9(inputs)));
+            if (!passed) {
+                return false;
+            }
+        }
+        return true;
     }
-    boolean testLevel10(ArrayList<BigInteger> inputs) {
-        return true; // stub
+    boolean testLevel10() {
+        ArrayList<BigInteger> inputs = new ArrayList<BigInteger>();
+        for (int i = 0; i < 10; i++) {
+            BigInteger bi = new BigInteger("" + i);
+            inputs.add(bi);
+            boolean passed = (evaluate(10, inputs).equals(computeAnswerLevel10(inputs)));
+            if (!passed) {
+                return false;
+            }
+        }
+        return true;
     }
+
+
+
+    BigInteger computeAnswerLevel1(ArrayList<BigInteger> inputs) {
+        return BigInteger.ONE;
+    }
+    BigInteger computeAnswerLevel2(ArrayList<BigInteger> inputs) {
+        return new BigInteger("2");
+    }
+    BigInteger computeAnswerLevel3(ArrayList<BigInteger> inputs) {
+        return new BigInteger("4");
+    }
+    BigInteger computeAnswerLevel4(ArrayList<BigInteger> inputs) {
+        return inputs.get(0);
+    }
+    BigInteger computeAnswerLevel5(ArrayList<BigInteger> inputs) {
+        return inputs.get(0).multiply(new BigInteger("2"));
+    }
+    BigInteger computeAnswerLevel6(ArrayList<BigInteger> inputs) {
+        BigInteger y = inputs.get(0).multiply(inputs.get(0));
+        return y.multiply(y).add(y);
+    }
+    BigInteger computeAnswerLevel7(ArrayList<BigInteger> inputs) {
+        BigInteger y = computeAnswerLevel6(inputs);
+        ArrayList<BigInteger> i2 = new ArrayList<BigInteger>();
+        i2.add(y);
+        return computeAnswerLevel6(i2);
+    }
+    BigInteger computeAnswerLevel8(ArrayList<BigInteger> inputs) {
+        BigInteger x = inputs.get(0);
+        BigInteger y = inputs.get(1);
+        int cto = x.compareTo(y);
+        if (cto > 0) {
+            return x;
+        } else {
+            return y;
+        }
+    }
+    BigInteger computeAnswerLevel9(ArrayList<BigInteger> inputs) {
+        ArrayList<BigInteger> i2 = new ArrayList<BigInteger>();
+
+
+        ArrayList<BigInteger> im1 = new ArrayList<BigInteger>();
+        im1.add(inputs.get(0));
+        im1.add(inputs.get(1));
+
+
+        i2.add(computeAnswerLevel8(im1));
+        i2.add(inputs.get(2));
+        return computeAnswerLevel8(i2);
+    }
+    BigInteger computeAnswerLevel10(ArrayList<BigInteger> inputs) {
+        ArrayList<BigInteger> im1 = new ArrayList<BigInteger>();
+        im1.add(inputs.get(0).subtract(BigInteger.ONE));
+        ArrayList<BigInteger> im2 = new ArrayList<BigInteger>();
+        im2.add(inputs.get(0).subtract(new BigInteger("2")));
+        BigInteger x = inputs.get(0);
+        int cto = x.compareTo(BigInteger.ZERO);
+        if (cto > 0) {
+            BigInteger r1 = computeAnswerLevel10(im1);
+            BigInteger r2 = computeAnswerLevel10(im2);
+            return r1.add(r2);
+        } else {
+            return BigInteger.ONE;
+        }
+    }
+
+
+
+
+
 }
