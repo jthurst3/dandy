@@ -7,6 +7,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.util.*;
 
+import java.math.BigInteger;
+
 import java.awt.geom.Rectangle2D;
 import java.awt.font.LineMetrics;
 
@@ -53,7 +55,7 @@ public class Layered extends JPanel{
 		} catch(Exception e){
 			System.exit(0);
 		}
-		initlevel(0);
+		initlevel(1);
 		
 		lastpaint = System.currentTimeMillis();
 		
@@ -73,35 +75,166 @@ public class Layered extends JPanel{
 		currlevel = level;
 
 		things = new ArrayList<Thing>(10);
-		things.add(new Thing(new Rectangle(0,0,400,550), Thing.ThingType.OBSTACLE, testpic));
-		things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-		things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-		things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-		things.add(new Thing(new Rectangle(80, 600, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("function ", TokenType.FUNCTIONSTART)));
-		things.add(new Thing(new Rectangle(200, 600, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("level"+level, TokenType.FUNCTION)));
-		things.add(new Thing(new Rectangle(300, 600, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("(", TokenType.LPAREN)));
-		things.add(new Thing(new Rectangle(350, 600, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token(")", TokenType.RPAREN)));
-		things.add(new Thing(new Rectangle(400, 600, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("{", TokenType.LBRACE)));
-		things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+		things.add(new Thing(new Rectangle(0,0,400,590), Thing.ThingType.OBSTACLE, testpic));
+		things.add(new Thing(new Rectangle(80, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("function ", TokenType.FUNCTIONSTART)));
+		things.add(new Thing(new Rectangle(170, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("level"+level, TokenType.FUNCTION)));
+		things.add(new Thing(new Rectangle(240, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("(", TokenType.LPAREN)));
+		things.add(new Thing(new Rectangle(380, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token(")", TokenType.RPAREN)));
+		things.add(new Thing(new Rectangle(400, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("{", TokenType.LBRACE)));
 		
-		rList = new ArrayList<Token>();
 		programtext = "";
 				
         p = new Parser();
-
-		pList = new ArrayList<Token>();
+        pList = new ArrayList<Token>();
+        rList = new ArrayList<Token>();
+		
 		pList.add(new Token("answer", TokenType.VARIABLE));
 		pList.add(new Token("=", TokenType.EQ));
-		pList.add(new Token("1", TokenType.INTEGER));
-		pList.add(new Token("+", TokenType.PLUS));
 		pList.add(new Token(";", TokenType.SEMICOLON));
-		
+        
+        switch(level)
+        {
+        case 1:
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+
+            pList.add(new Token("1", TokenType.INTEGER));
+            break;
+        
+        case 2:
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+
+            pList.add(new Token("1", TokenType.INTEGER));
+            pList.add(new Token("+", TokenType.PLUS));
+            break;
+            
+        case 3:
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+
+            pList.add(new Token("1", TokenType.INTEGER));
+            pList.add(new Token("+", TokenType.PLUS));
+            pList.add(new Token("*", TokenType.TIMES));
+            pList.add(new Token("(", TokenType.LPAREN));
+            pList.add(new Token(")", TokenType.RPAREN));
+            break;
+            
+        case 4:
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+
+            pList.add(new Token("x", TokenType.VARIABLE));
+            break;
+            
+        case 5:
+ 			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("+", TokenType.PLUS));
+            break;
+        
+        case 6:
+ 			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("y", TokenType.VARIABLE));
+            pList.add(new Token("+", TokenType.PLUS));
+            pList.add(new Token("*", TokenType.TIMES));
+            break;
+            
+        case 7:
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("y", TokenType.VARIABLE));
+            pList.add(new Token("level6", TokenType.FUNCTION));
+            pList.add(new Token("(", TokenType.LPAREN));
+            pList.add(new Token(")", TokenType.RPAREN));
+            break;
+            
+            
+        case 8:
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("y", TokenType.VARIABLE));
+            pList.add(new Token("(", TokenType.LPAREN));
+            pList.add(new Token(")", TokenType.RPAREN));
+            pList.add(new Token("{", TokenType.LBRACE));
+            pList.add(new Token("}", TokenType.RBRACE));
+            pList.add(new Token(">", TokenType.GREATERTHAN));
+            pList.add(new Token("if", TokenType.IF));
+            pList.add(new Token("else", TokenType.ELSE));
+            break;
+            
+        case 9:
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("y", TokenType.VARIABLE));
+            pList.add(new Token("z", TokenType.VARIABLE));
+            pList.add(new Token("(", TokenType.LPAREN));
+            pList.add(new Token(")", TokenType.RPAREN));
+            pList.add(new Token("level8", TokenType.FUNCTION));
+            pList.add(new Token(",", TokenType.COMMA));
+            break;
+            
+        case 10:
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+
+            pList.add(new Token("x", TokenType.VARIABLE));
+            pList.add(new Token("+", TokenType.PLUS));
+            pList.add(new Token("(", TokenType.LPAREN));
+            pList.add(new Token(")", TokenType.RPAREN));
+            pList.add(new Token("{", TokenType.LBRACE));
+            pList.add(new Token("}", TokenType.RBRACE));
+            pList.add(new Token(">", TokenType.GREATERTHAN));
+            pList.add(new Token("if", TokenType.IF));
+            pList.add(new Token("else", TokenType.ELSE));
+            pList.add(new Token("0", TokenType.INTEGER));
+            pList.add(new Token("1", TokenType.INTEGER));
+            pList.add(new Token("2", TokenType.INTEGER));
+            pList.add(new Token("level10", TokenType.FUNCTION));
+            pList.add(new Token("-", TokenType.MINUS));
+
+            break;  
+        default: System.out.println("should not get here!!!");
+        break;
+        }
+
 		myx = 10.0;
-		myy = 580.0;
+		myy = 610.0;
 		
 		mapx = 0.0;
 		mapy = 0.0;
-	}
+    }
     
     public void paintComponent(Graphics g)
     {
@@ -139,7 +272,7 @@ public class Layered extends JPanel{
 			vel[1] = 0;
 		}
 
-		Thing t = conflicts(new Rectangle((int)newx,(int)newy,gw,gh));
+		Thing t = conflicts(g,new Rectangle((int)newx,(int)newy,gw,gh));
 		if(t == null || t.type == Thing.ThingType.FIXEDTOKEN){
 			myx = newx;
 			myy = newy;
@@ -150,7 +283,6 @@ public class Layered extends JPanel{
 			vel[1] = 0;
 			break;
 		case FIXEDTOKEN:
-			System.out.println("DEBUG!");
 			if(!grabToken((Token)t.data)){
 				initlevel(currlevel);
 				return;
@@ -159,10 +291,10 @@ public class Layered extends JPanel{
 			}
 			break;
 		case END:
-			if(testProgram()){
-				initlevel(currlevel+1);
-			} else {
+			if(!grabToken(new Token("}", TokenType.RBRACE)) || !testProgram()){
 				initlevel(currlevel);
+			} else {
+				initlevel(currlevel+1);
 			}
 			return;
 		}
@@ -314,9 +446,18 @@ public class Layered extends JPanel{
         }
     }
 	
-	Thing conflicts(Rectangle test){
+	Thing conflicts(Graphics g, Rectangle test){
 		for(Thing t: things){
-			if(test.intersects(t.bounds)) return t;
+			boolean x;
+			if(t.type == Thing.ThingType.FIXEDTOKEN){
+				Rectangle2D tokenbounds = g.getFontMetrics().getStringBounds(((Token)t.data).content, g);
+				Rectangle temp = new Rectangle(test);
+				temp.translate(-(int)t.bounds.getX(), -(int)t.bounds.getY());
+				x = tokenbounds.intersects(temp);
+			} else{
+				x = test.intersects(t.bounds);
+			}
+			if(x) return t;
 		}
 		return null;
 	}
@@ -351,4 +492,69 @@ public class Layered extends JPanel{
 		g.setColor(Color.white);
 		g.drawString(s, x, y);
 	}
+
+
+    // stub, note that Doug is gonna write this function out in another file
+    BigInteger evaluate(int level, ArrayList<Token> tokens) {
+        return BigInteger.ONE; // stub
+    }
+
+
+
+    boolean test(int level, ArrayList<BigInteger> inputs) {
+        switch (level) {
+            case 1:
+            return testLevel1(inputs);
+            case 2:
+            return testLevel2(inputs);
+            case 3:
+            return testLevel3(inputs);
+            case 4:
+            return testLevel4(inputs);
+            case 5:
+            return testLevel5(inputs);
+            case 6:
+            return testLevel6(inputs);
+            case 7:
+            return testLevel7(inputs);
+            case 8:
+            return testLevel8(inputs);
+            case 9:
+            return testLevel9(inputs);
+            case 10:
+            return testLevel10(inputs);
+            default:
+            return false;
+        }
+    }
+    boolean testLevel1(ArrayList<BigInteger> inputs) {
+        return evaluate(1, rList).equals(BigInteger.ONE); // stub
+    }
+    boolean testLevel2(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel3(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel4(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel5(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel6(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel7(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel8(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel9(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel10(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
 }

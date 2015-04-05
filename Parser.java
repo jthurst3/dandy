@@ -9,20 +9,27 @@ public class Parser {
 
 	public static void main(String[] args) {
 		// tests the parser on example inputs
-		// for (int i = 0; i < 1; i++) {
-		// 	Parser p = new Parser();
-		// 	Token[] tokens = new Token[] {new Token("1", TokenType.INTEGER), new Token("+", TokenType.OPERATOR), new Token("1", TokenType.INTEGER)};
-		// 	for (int j = 0; j < tokens.length; j++) {
-		// 		boolean status = p.addAndEvaluate(tokens[j]);
-		// 		if (!status) {
-		// 			System.out.println("Test failed after adding token " + tokens[j] + " on input " + p.currentTokens);
-		// 		} else {
-		// 			System.out.println("successfully added token " + tokens[j] + " on inut " + p.currentTokens);
-		// 		}
-		// 	}
-		// }
-		// Token t = new Token("+", TokenType.OPERATOR);
-		// System.out.println(t);
+		Parser p = new Parser();
+		ArrayList<Token> rList = new ArrayList<Token>();
+		rList.add(new Token("function", TokenType.FUNCTIONSTART));
+		rList.add(new Token("level" + 1, TokenType.FUNCTION));
+		rList.add(new Token("(", TokenType.LPAREN));
+		rList.add(new Token(")", TokenType.RPAREN));
+		rList.add(new Token("{", TokenType.LBRACE));
+		rList.add(new Token("answer", TokenType.VARIABLE));
+		rList.add(new Token("+", TokenType.PLUS));
+		rList.add(new Token("answer", TokenType.VARIABLE));
+		rList.add(new Token("=", TokenType.EQ));
+		rList.add(new Token("1", TokenType.INTEGER));
+		rList.add(new Token("1", TokenType.INTEGER));
+		rList.add(new Token("+", TokenType.PLUS));
+		rList.add(new Token("1", TokenType.INTEGER));
+		rList.add(new Token(";", TokenType.SEMICOLON));
+
+
+		for (int i = 0; i < rList.size(); i++) {
+			p.addAndEvaluate(rList.get(i));
+		}
 	}
 
 
@@ -58,7 +65,7 @@ public class Parser {
 	}
 
 	public void initializeRules() {
-		rules = new Rule[34];
+		rules = new Rule[37];
 		rules[0] = new Rule(NonterminalType.Method, new Object[] {NonterminalType.FunctionStart, NonterminalType.BlockStmt},
 			new TokenType[] {TokenType.FUNCTIONSTART});
 		rules[1] = new Rule(NonterminalType.FunctionStart, new Object[] {TokenType.FUNCTIONSTART, NonterminalType.FnName, TokenType.LPAREN, NonterminalType.VarTail},
@@ -83,12 +90,12 @@ public class Parser {
 			new TokenType[] {TokenType.LBRACE});
 		rules[11] = new Rule(NonterminalType.Statement, new Object[] {NonterminalType.CallStmt},
 			new TokenType[] {TokenType.FUNCTION});
-		rules[12] = new Rule(NonterminalType.IfStatement, new Object[] {TokenType.IF, TokenType.LPAREN, NonterminalType.Expr, TokenType.RPAREN, NonterminalType.BlockStmt},
+		rules[12] = new Rule(NonterminalType.IfStatement, new Object[] {TokenType.IF, TokenType.LPAREN, NonterminalType.Expr, TokenType.RPAREN, NonterminalType.BlockStmt, NonterminalType.ElseBlock},
 			new TokenType[] {TokenType.IF});
-		rules[13] = new Rule(NonterminalType.CallStmt, new Object[] {NonterminalType.FnName, TokenType.LPAREN, NonterminalType.VarTail, TokenType.SEMICOLON},
+		rules[13] = new Rule(NonterminalType.CallStmt, new Object[] {NonterminalType.FunctionCall, TokenType.SEMICOLON},
 			new TokenType[] {TokenType.FUNCTION});
 		rules[14] = new Rule(NonterminalType.Expr, new Object[] {NonterminalType.SumExpr, NonterminalType.ExprTail},
-			new TokenType[] {TokenType.INTEGER, TokenType.LPAREN});
+			new TokenType[] {TokenType.INTEGER, TokenType.LPAREN, TokenType.VARIABLE, TokenType.FUNCTION});
 		rules[15] = new Rule(NonterminalType.ExprTail, new Object[] {},
 			new TokenType[] {TokenType.SEMICOLON, TokenType.RPAREN});
 		rules[16] = new Rule(NonterminalType.ExprTail, new Object[] {TokenType.LESSTHAN, NonterminalType.SumExpr},
@@ -97,26 +104,26 @@ public class Parser {
 			new TokenType[] {TokenType.GREATERTHAN});
 		rules[18] = new Rule(NonterminalType.ExprTail, new Object[] {TokenType.EQEQ, NonterminalType.SumExpr},
 			new TokenType[] {TokenType.EQEQ});
-		rules[19] = new Rule(NonterminalType.SumExpr, new Object[] {NonterminalType.ProdExpr, NonterminalType.SumExprTail},
-			new TokenType[] {TokenType.INTEGER, TokenType.LPAREN});
-		rules[20] = new Rule(NonterminalType.SumExprTail, new Object[] {},
+		rules[19] = new Rule(NonterminalType.SumExpr, new Object[] {NonterminalType.ProdExpr, NonterminalType.SumExprList},
+			new TokenType[] {TokenType.INTEGER, TokenType.LPAREN, TokenType.VARIABLE, TokenType.FUNCTION});
+		rules[20] = new Rule(NonterminalType.SumExprList, new Object[] {},
 			new TokenType[] {TokenType.LESSTHAN, TokenType.GREATERTHAN, TokenType.EQEQ, TokenType.SEMICOLON, TokenType.RPAREN});
-		rules[21] = new Rule(NonterminalType.SumExprTail, new Object[] {NonterminalType.SumExprList},
-			new TokenType[] {TokenType.PLUS, TokenType.MINUS});
-		rules[22] = new Rule(NonterminalType.SumExprList, new Object[] {TokenType.PLUS, NonterminalType.ProdExpr, NonterminalType.SumExprList},
+		rules[21] = new Rule(NonterminalType.SumExprList, new Object[] {TokenType.PLUS, NonterminalType.ProdExpr, NonterminalType.SumExprList},
 			new TokenType[] {TokenType.PLUS});
-		rules[23] = new Rule(NonterminalType.SumExprList, new Object[] {TokenType.MINUS, NonterminalType.ProdExpr, NonterminalType.SumExprList},
+		rules[22] = new Rule(NonterminalType.SumExprList, new Object[] {TokenType.MINUS, NonterminalType.ProdExpr, NonterminalType.SumExprList},
 			new TokenType[] {TokenType.MINUS});
-		rules[24] = new Rule(NonterminalType.ProdExpr, new Object[] {NonterminalType.Atom, NonterminalType.ProdExprTail},
-			new TokenType[] {TokenType.INTEGER, TokenType.LPAREN});
-		rules[25] = new Rule(NonterminalType.ProdExprTail, new Object[] {},
+		rules[23] = new Rule(NonterminalType.ProdExpr, new Object[] {NonterminalType.Atom, NonterminalType.ProdExprList},
+			new TokenType[] {TokenType.INTEGER, TokenType.LPAREN, TokenType.VARIABLE, TokenType.FUNCTION});
+		rules[24] = new Rule(NonterminalType.ProdExprList, new Object[] {},
 			new TokenType[] {TokenType.PLUS, TokenType.MINUS, TokenType.LESSTHAN, TokenType.GREATERTHAN, TokenType.EQEQ, TokenType.SEMICOLON, TokenType.RPAREN});
-		rules[26] = new Rule(NonterminalType.ProdExprTail, new Object[] {NonterminalType.ProdExprList},
+		rules[25] = new Rule(NonterminalType.ProdExprList, new Object[] {TokenType.TIMES, NonterminalType.ProdExprList},
 			new TokenType[] {TokenType.TIMES});
-		rules[27] = new Rule(NonterminalType.ProdExprList, new Object[] {TokenType.TIMES, NonterminalType.ProdExprList},
-			new TokenType[] {TokenType.TIMES});
-		rules[28] = new Rule(NonterminalType.Atom, new Object[] {TokenType.INTEGER},
+		rules[26] = new Rule(NonterminalType.Atom, new Object[] {TokenType.INTEGER},
 			new TokenType[] {TokenType.INTEGER});
+		rules[27] = new Rule(NonterminalType.Atom, new Object[] {NonterminalType.FunctionCall},
+			new TokenType[] {TokenType.FUNCTION});
+		rules[28] = new Rule(NonterminalType.Atom, new Object[] {NonterminalType.VarName},
+			new TokenType[] {TokenType.VARIABLE});
 		rules[29] = new Rule(NonterminalType.Atom, new Object[] {TokenType.LPAREN, NonterminalType.Expr, TokenType.RPAREN},
 			new TokenType[] {TokenType.LPAREN});
 		rules[30] = new Rule(NonterminalType.AssignStatement, new Object[] {NonterminalType.VarName, TokenType.EQ, NonterminalType.Expr, TokenType.SEMICOLON},
@@ -127,6 +134,12 @@ public class Parser {
 			new TokenType[] {TokenType.RBRACE});
 		rules[33] = new Rule(NonterminalType.StmtList, new Object[] {NonterminalType.Statement, NonterminalType.StmtList},
 			new TokenType[] {TokenType.IF, TokenType.LBRACE, TokenType.VARIABLE, TokenType.FUNCTION});
+		rules[34] = new Rule(NonterminalType.FunctionCall, new Object[] {NonterminalType.FnName, TokenType.LPAREN, NonterminalType.VarTail},
+			new TokenType[] {TokenType.FUNCTION});
+		rules[35] = new Rule(NonterminalType.ElseBlock, new Object[] {},
+			new TokenType[] {TokenType.IF, TokenType.LBRACE, TokenType.VARIABLE, TokenType.FUNCTION, TokenType.RBRACE});
+		rules[36] = new Rule(NonterminalType.ElseBlock, new Object[] {TokenType.ELSE, NonterminalType.Statement},
+			new TokenType[] {TokenType.ELSE});
 
 	}
 
@@ -186,20 +199,17 @@ public class Parser {
 		System.out.println("stack is: " + parsingStack);
 		for (int i = 0; i < currentTokens.size(); i++) {
 			Token t = currentTokens.get(i);
-			if (parsingStack.isEmpty()) {
+			if (parsingStack.isEmpty() && interimTokens.size() == currentTokens.size()) {
 				return true;
 			}
 			Object last = parsingStack.pop();
-			System.out.println("stack is: " + parsingStack);
+			System.out.println("parsing token " + t + " with top of stack = " + last);
+			System.out.println("stack is starting: " + parsingStack);
 			while (!(t.type.getClass().equals(last.getClass()) && t.type.name().equals(((TokenType)last).name()))) {
-				boolean classTest = t.type.getClass().equals(last.getClass());
-				if (classTest) {
-					boolean nameTest = t.type.name().equals(((TokenType)last).name());
-					System.out.println(t.type.name());
-					System.out.println(((TokenType) last).name());
-					System.out.println("class test is: " + classTest + " and name test is: " + nameTest);
-				} else {
-					System.out.println("class test returned false");
+				System.out.println("not a match");
+				if(t.type.getClass().equals(last.getClass()) && !t.type.name().equals(((TokenType)last).name())) {
+					System.out.println("name does not match");
+					return false;
 				}
 				// see if the token type is in the predict set of the current rule
 				int indexOfRule = findIndexOfRule((NonterminalType) last, t);
@@ -212,24 +222,27 @@ public class Parser {
 					parsingStack.push(rules[indexOfRule].right[j]);
 				}
 				System.out.println("stack is: " + parsingStack);
-				if (parsingStack.isEmpty()) {
+				if (parsingStack.isEmpty() && interimTokens.size() == currentTokens.size()) {
 					return true;
 				}
 				last = parsingStack.pop();
 				System.out.println("stack is: " + parsingStack);
 			}
-			System.out.println("stack is: " + parsingStack);
+			System.out.println("stack is done: " + parsingStack);
 			interimTokens.add(currentTokens.get(i));
-			System.out.println("interim tokens is; " + interimTokens);
+			System.out.println("interim tokens is: " + interimTokens);
 		}
 		return true;
 	}
 
 	public int findIndexOfRule(NonterminalType last, Token t) {
 		for (int i = 0; i < rules.length; i++) {
-			// System.out.println("comparing nonterminals: " + rules[i].left+" and "+last + " with result " + rules[i].left.equals(last));
-			if (rules[i].left.equals(last) && member(rules[i].predict, t.type)) {
-				return i;
+			System.out.println("comparing nonterminals: " + rules[i].left+" and "+last + " with result " + rules[i].left.equals(last));
+			if (rules[i].left.equals(last)) {
+				// System.out.println("got to " + rules[i].left);
+				if(member(rules[i].predict, t.type)) {
+					return i;
+				}
 			}
 		}
 		return -1;
