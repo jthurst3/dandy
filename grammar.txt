@@ -12,7 +12,7 @@ ExprTail -> EPSILON | LessThan SumExpr | GreaterThan SumExpr | EqEq SumExpr
 SumExpr -> ProdExpr SumExprList
 SumExprList -> EPSILON | Plus ProdExpr SumExprList | Minus ProdExpr SumExprList
 ProdExpr -> Atom ProdExprList
-ProdExprList -> EPSILON | Times ProdExprList
+ProdExprList -> EPSILON | Times Atom ProdExprList
 Atom -> 000 | VarName | FunctionCall | LParen Expr RParen
 AssignStatement -> VarName Eq Expr Semicolon
 BlockStmt -> LBrace StmtList RBrace

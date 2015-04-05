@@ -116,7 +116,7 @@ public class Parser {
 			new TokenType[] {TokenType.INTEGER, TokenType.LPAREN, TokenType.VARIABLE, TokenType.FUNCTION});
 		rules[24] = new Rule(NonterminalType.ProdExprList, new Object[] {},
 			new TokenType[] {TokenType.PLUS, TokenType.MINUS, TokenType.LESSTHAN, TokenType.GREATERTHAN, TokenType.EQEQ, TokenType.SEMICOLON, TokenType.RPAREN});
-		rules[25] = new Rule(NonterminalType.ProdExprList, new Object[] {TokenType.TIMES, NonterminalType.ProdExprList},
+		rules[25] = new Rule(NonterminalType.ProdExprList, new Object[] {TokenType.TIMES, NonterminalType.Atom, NonterminalType.ProdExprList},
 			new TokenType[] {TokenType.TIMES});
 		rules[26] = new Rule(NonterminalType.Atom, new Object[] {TokenType.INTEGER},
 			new TokenType[] {TokenType.INTEGER});
