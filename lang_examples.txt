@@ -24,7 +24,7 @@ function levelsix(x){
 }
 
 function levelseven(x){
-	y = levelsix(x)
+	y = levelsix(x);
 	answer = levelsix(y);
 }
 
