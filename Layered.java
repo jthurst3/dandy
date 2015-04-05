@@ -7,6 +7,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.util.*;
 
+import java.math.BigInteger;
+
 import java.awt.geom.Rectangle2D;
 import java.awt.font.LineMetrics;
 
@@ -50,7 +52,7 @@ public class Layered extends JPanel{
 		try{
 			testpic = ImageIO.read(new BufferedInputStream(new FileInputStream("testpic.png")));
 		} catch(Exception e){}
-		initlevel(0);
+		initlevel(1);
 		
 		lastpaint = System.currentTimeMillis();
 		
@@ -207,6 +209,8 @@ public class Layered extends JPanel{
 
             rList.add(new Token("x", TokenType.VARIABLE));
             break;  
+        default: System.out.println("should not get here!!!");
+        break;
         
         }
 
@@ -423,4 +427,63 @@ public class Layered extends JPanel{
 		}
 		return false;
 	}
+
+
+
+    boolean test(int level, ArrayList<BigInteger> inputs) {
+        switch (level) {
+            case 1:
+            return testLevel1(inputs);
+            case 2:
+            return testLevel2(inputs);
+            case 3:
+            return testLevel3(inputs);
+            case 4:
+            return testLevel4(inputs);
+            case 5:
+            return testLevel5(inputs);
+            case 6:
+            return testLevel6(inputs);
+            case 7:
+            return testLevel7(inputs);
+            case 8:
+            return testLevel8(inputs);
+            case 9:
+            return testLevel9(inputs);
+            case 10:
+            return testLevel10(inputs);
+            default:
+            return false;
+        }
+    }
+    boolean testLevel1(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel2(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel3(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel4(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel5(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel6(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel7(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel8(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel9(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
+    boolean testLevel10(ArrayList<BigInteger> inputs) {
+        return true; // stub
+    }
 }
