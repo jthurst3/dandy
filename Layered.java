@@ -45,6 +45,7 @@ public class Layered extends JPanel{
     private final int DEFAULT_NUM_TEST_CASES = 100;
     Random rand = new Random();
 
+    Image[] pics = new Image[11];
 	Image testpic;
     Parser p;
 	
@@ -54,10 +55,20 @@ public class Layered extends JPanel{
     {
 		
 		try{
-			testpic = ImageIO.read(new BufferedInputStream(new FileInputStream("testpic.png")));
-		} catch(Exception e){
-			System.exit(0);
-		}
+            pics[0] = ImageIO.read(new BufferedInputStream(new FileInputStream("dolphin.jpg")));
+            pics[1] = ImageIO.read(new BufferedInputStream(new FileInputStream("Neptune.jpg")));
+            pics[2] = ImageIO.read(new BufferedInputStream(new FileInputStream("scuba.jpg")));
+            pics[3] = ImageIO.read(new BufferedInputStream(new FileInputStream("seahorse.jpg")));
+            pics[4] = ImageIO.read(new BufferedInputStream(new FileInputStream("shark.jpg")));
+            pics[5] = ImageIO.read(new BufferedInputStream(new FileInputStream("ShipwreckLg.jpg")));
+            pics[6] = ImageIO.read(new BufferedInputStream(new FileInputStream("squid.jpg")));
+            pics[7] = ImageIO.read(new BufferedInputStream(new FileInputStream("treasure.jpg")));
+            pics[8] = ImageIO.read(new BufferedInputStream(new FileInputStream("turtle.jpg")));
+            pics[9] = ImageIO.read(new BufferedInputStream(new FileInputStream("whale.jpg")));
+            pics[10] = ImageIO.read(new BufferedInputStream(new FileInputStream("brass-key.jpg")));
+        } catch(Exception e){
+            System.exit(0);
+        }
 		initlevel(1);
 		
 		lastpaint = System.currentTimeMillis();
@@ -78,7 +89,7 @@ public class Layered extends JPanel{
 		currlevel = level;
 
 		things = new ArrayList<Thing>(10);
-		things.add(new Thing(new Rectangle(0,0,400,590), Thing.ThingType.OBSTACLE, testpic));
+		things.add(new Thing(new Rectangle(0,0,400,590), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
 		things.add(new Thing(new Rectangle(80, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("function ", TokenType.FUNCTIONSTART)));
 		things.add(new Thing(new Rectangle(170, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("level"+level, TokenType.FUNCTION)));
 		things.add(new Thing(new Rectangle(240, 620, 1, 1), Thing.ThingType.FIXEDTOKEN, new Token("(", TokenType.LPAREN)));
@@ -98,29 +109,29 @@ public class Layered extends JPanel{
         switch(level)
         {
         case 1:
-			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, pics[10]));
 
             pList.add(new Token("1", TokenType.INTEGER));
             break;
         
         case 2:
-			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, pics[10]));
 
             pList.add(new Token("1", TokenType.INTEGER));
             pList.add(new Token("+", TokenType.PLUS));
             break;
             
         case 3:
-			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, pics[10]));
 
             pList.add(new Token("1", TokenType.INTEGER));
             pList.add(new Token("+", TokenType.PLUS));
@@ -130,29 +141,29 @@ public class Layered extends JPanel{
             break;
             
         case 4:
-			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, pics[10]));
 
             pList.add(new Token("x", TokenType.VARIABLE));
             break;
             
         case 5:
- 			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+ 			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, pics[10]));
 
             pList.add(new Token("x", TokenType.VARIABLE));
             pList.add(new Token("+", TokenType.PLUS));
             break;
         
         case 6:
- 			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+ 			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, pics[10]));
 
             pList.add(new Token("x", TokenType.VARIABLE));
             pList.add(new Token("y", TokenType.VARIABLE));
@@ -161,10 +172,10 @@ public class Layered extends JPanel{
             break;
             
         case 7:
-			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, pics[10]));
 
             pList.add(new Token("x", TokenType.VARIABLE));
             pList.add(new Token("y", TokenType.VARIABLE));
@@ -175,10 +186,10 @@ public class Layered extends JPanel{
             
             
         case 8:
-			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, pics[10]));
 
             pList.add(new Token("x", TokenType.VARIABLE));
             pList.add(new Token("y", TokenType.VARIABLE));
@@ -192,10 +203,10 @@ public class Layered extends JPanel{
             break;
             
         case 9:
-			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, pics[10]));
 
             pList.add(new Token("x", TokenType.VARIABLE));
             pList.add(new Token("y", TokenType.VARIABLE));
@@ -207,10 +218,10 @@ public class Layered extends JPanel{
             break;
             
         case 10:
-			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, testpic));
-			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, testpic));
+			things.add(new Thing(new Rectangle(600,200,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(600,400,50,50), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(1600,0,200,200), Thing.ThingType.OBSTACLE, pics[(int) Math.floor(Math.random()*10)]));
+			things.add(new Thing(new Rectangle(2000, 300, 200, 200), Thing.ThingType.END, pics[10]));
 
             pList.add(new Token("x", TokenType.VARIABLE));
             pList.add(new Token("+", TokenType.PLUS));
