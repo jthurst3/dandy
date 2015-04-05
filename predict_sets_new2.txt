@@ -17,18 +17,18 @@
 17	ExprTail → LessThan SumExpr	LessThan
 18	ExprTail → GreaterThan SumExpr	GreaterThan
 19	ExprTail → EqEq SumExpr	EqEq
-20	SumExpr → ProdExpr SumExprList	000, LParen
-21	SumExprList → ε	LessThan, GreaterThan, EqEq, Semicolon, RParen
-22	SumExprList → Plus ProdExpr SumExprList	Plus
-23	SumExprList → Minus ProdExpr SumExprList	Minus
-24	ProdExpr → Atom ProdExprList	000, LParen
-25	ProdExprList → ε	Plus, Minus, LessThan, GreaterThan, EqEq, Semicolon, RParen
-26	ProdExprList → Times ProdExprList	Times
-27	Atom → 000	000
-
-
-28	Atom → LParen Expr RParen	LParen
-29	AssignStatement → VarName Eq Expr Semicolon	asdf
-30	BlockStmt → LBrace StmtList RBrace	LBrace
-31	StmtList → ε	RBrace
-32	StmtList → Statement StmtList	IfToken, LBrace, asdf, ghjk
+20	SumExpr → ProdExpr SumExprTail	000, LParen
+22	SumExprList → ε	LessThan, GreaterThan, EqEq, Semicolon, RParen
+21	SumExprTail → SumExprList	Plus, Minus
+23	SumExprList → Plus ProdExpr SumExprList	Plus
+24	SumExprList → Minus ProdExpr SumExprList	Minus
+25	ProdExpr → Atom ProdExprTail	000, LParen
+27	ProdExprList → ε	Plus, Minus, LessThan, GreaterThan, EqEq, Semicolon, RParen
+26	ProdExprTail → ProdExprList	Times
+28	ProdExprList → Times ProdExprList	Times
+29	Atom → 000	000
+30	Atom → LParen Expr RParen	LParen
+31	AssignStatement → VarName Eq Expr Semicolon	asdf
+32	BlockStmt → LBrace StmtList RBrace	LBrace
+33	StmtList → ε	RBrace
+34	StmtList → Statement StmtList	IfToken, LBrace, asdf, ghjk

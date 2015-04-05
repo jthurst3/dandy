@@ -11,15 +11,15 @@ public enum NonterminalType {
 	Expr,
 	ExprTail,
 	SumExpr,
-	SumExprTail,
 	SumExprList,
 	ProdExpr,
-	ProdExprTail,
 	ProdExprList,
 	Atom,
 	AssignStatement,
 	BlockStmt,
-	StmtList;
+	StmtList,
+	ElseBlock,
+	FunctionCall;
 
 	public TokenType[] first, follow;
 
