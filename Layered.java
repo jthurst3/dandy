@@ -319,8 +319,12 @@ public class Layered extends JPanel{
 			}
 		}
 
-		double map_velocity = (newx-(mapx+2.0*getWidth()/3))/1000.0;
-		if(map_velocity < 0) map_velocity = 0;
+		double map_velocity_right = (newx-(mapx+2.0*getWidth()/3))/1000.0;
+		if(map_velocity_right < 0) map_velocity_right = 0;
+        double map_velocity_left = (newx-(mapx+1.0*getWidth()/3))/1000.0;
+        if (map_velocity_left > 0 || mapx < 0) map_velocity_left = 0;
+        double map_velocity = map_velocity_left + map_velocity_right;
+
 		if(vel[0] >= 0 && map_velocity > vel[0]) map_velocity = vel[0];
 		mapx += map_velocity*diff;
 

@@ -196,24 +196,24 @@ public class Parser {
 		Stack<Object> parsingStack = new Stack<Object>();
 		ArrayList<Token> interimTokens = new ArrayList<Token>();
 		parsingStack.push(NonterminalType.Method);
-		System.out.println("stack is: " + parsingStack);
+		// System.out.println("stack is: " + parsingStack);
 		for (int i = 0; i < currentTokens.size(); i++) {
 			Token t = currentTokens.get(i);
 			if (parsingStack.isEmpty() && interimTokens.size() == currentTokens.size()) {
 				return true;
 			}
 			Object last = parsingStack.pop();
-			System.out.println("parsing token " + t + " with top of stack = " + last);
-			System.out.println("stack is starting: " + parsingStack);
+			// System.out.println("parsing token " + t + " with top of stack = " + last);
+			// System.out.println("stack is starting: " + parsingStack);
 			while (!(t.type.getClass().equals(last.getClass()) && t.type.name().equals(((TokenType)last).name()))) {
-				System.out.println("not a match");
+				// System.out.println("not a match");
 				if(t.type.getClass().equals(last.getClass()) && !t.type.name().equals(((TokenType)last).name())) {
-					System.out.println("name does not match");
+					// System.out.println("name does not match");
 					return false;
 				}
 				// see if the token type is in the predict set of the current rule
 				int indexOfRule = findIndexOfRule((NonterminalType) last, t);
-				System.out.println(indexOfRule);
+				// System.out.println(indexOfRule);
 				if (indexOfRule == -1) {
 					return false;
 				}
@@ -221,23 +221,23 @@ public class Parser {
 				for (int j = rules[indexOfRule].right.length - 1; j >= 0; j--) {
 					parsingStack.push(rules[indexOfRule].right[j]);
 				}
-				System.out.println("stack is: " + parsingStack);
+				// System.out.println("stack is: " + parsingStack);
 				if (parsingStack.isEmpty() && interimTokens.size() == currentTokens.size()) {
 					return true;
 				}
 				last = parsingStack.pop();
-				System.out.println("stack is: " + parsingStack);
+				// System.out.println("stack is: " + parsingStack);
 			}
-			System.out.println("stack is done: " + parsingStack);
+			// System.out.println("stack is done: " + parsingStack);
 			interimTokens.add(currentTokens.get(i));
-			System.out.println("interim tokens is: " + interimTokens);
+			// System.out.println("interim tokens is: " + interimTokens);
 		}
 		return true;
 	}
 
 	public int findIndexOfRule(NonterminalType last, Token t) {
 		for (int i = 0; i < rules.length; i++) {
-			System.out.println("comparing nonterminals: " + rules[i].left+" and "+last + " with result " + rules[i].left.equals(last));
+			// System.out.println("comparing nonterminals: " + rules[i].left+" and "+last + " with result " + rules[i].left.equals(last));
 			if (rules[i].left.equals(last)) {
 				// System.out.println("got to " + rules[i].left);
 				if(member(rules[i].predict, t.type)) {
