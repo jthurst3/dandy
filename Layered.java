@@ -483,7 +483,7 @@ public class Layered extends JPanel{
 	}
 	
 	boolean testProgram(){
-		return true;
+		return test(currlevel);
 	}
 	
 	void paintTokenString(Graphics g, String s, int x, int y){
